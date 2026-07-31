@@ -151,7 +151,10 @@ export default function Hero() {
               placeholder="blur"
               sizes="100vw"
               onLoad={() => setReady(true)}
-              className="object-cover"
+              // The card is a wide band, so cover crops top and bottom. Pulled
+              // above centre to keep the sky and the tops of the towers in
+              // frame rather than splitting the overflow evenly.
+              className="object-cover object-[center_25%]"
             />
           </div>
         </div>
