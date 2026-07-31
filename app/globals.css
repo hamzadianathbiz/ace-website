@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-ace-cream text-ace-black font-sans antialiased;
+  }
+  img {
+    @apply block;
+  }
+  ::selection {
+    @apply bg-ace-red text-white;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ace-red;
+    outline-style: solid;
+  }
+  /* On dark surfaces the red ring reads as noise — use white instead. */
+  .on-dark :focus-visible {
+    @apply outline-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Page gutter — one horizontal rhythm for every section. */
+  .gutter {
+    @apply px-4 md:px-gutter;
+  }
+  /* Vertical section rhythm. */
+  .section-y {
+    @apply py-[68px] md:py-[96px];
+  }
+
+  .ph {
+    @apply flex items-center justify-center rounded-2xl bg-ace-sand text-ace-gray3 text-[12px] tracking-[.08em] uppercase text-center;
+  }
+
+  /*
+    One button, matching the hero CTA from the supplied spec: black fill,
+    12px radius, 19/10 padding, the two stacked drop shadows. `.solid` is
+    kept as an alias so existing call sites need no edit. `.on-film` flips
+    it for the dark sections, where black on black draws no edge.
+
+    Not named `invert`: that is a Tailwind filter utility, and the collision
+    silently inverts the element's paint.
+  */
+  .pill,
+  .pill.solid {
+    @apply inline-flex items-center gap-2 rounded-xl border-[1.5px] border-black/10 bg-ace-black px-[19px] py-[10px] text-[15px] font-medium text-white cursor-pointer transition-colors duration-200;
+    box-shadow: 0 11px 11px rgba(0, 0, 0, 0.09), 0 3px 6px rgba(0, 0, 0, 0.1);
+  }
+  .pill:hover,
+  .pill.solid:hover {
+    @apply bg-ace-red text-white;
+  }
+  .pill:active,
+  .pill.solid:active {
+    @apply bg-ace-red-dark;
+  }
+  .pill.on-film {
+    @apply border-black/10 bg-white text-ace-black;
+  }
+  .pill.on-film:hover {
+    @apply bg-ace-red text-white;
+  }
+  .pill.on-film:active {
+    @apply bg-ace-red-dark text-white;
+  }
+
+  /*
+    Type system. Cardo (`font-display`) carries anything at heading rank,
+    Schibsted Grotesk (`font-sans`) carries running text, IBM Plex Mono
+    carries eyebrows, ordinals and captions. Sizes live here rather than on
+    each section so the scale stays one decision.
+
+    Cardo ships 400 and 700 only. Nothing here asks for 500 or 600 — the
+    browser would synthesise those, which is what made the feature tiles
+    look heavier than the rest of the page.
+  */
+  .display-xl {
+    @apply font-display text-[38px] font-normal leading-[1.15] tracking-[-0.047em] md:text-[clamp(3rem,5vw,4rem)];
+  }
+  .display-lg {
+    @apply font-display text-[30px] font-normal leading-[1.2] tracking-[-0.035em] md:text-[clamp(2.25rem,3.4vw,2.75rem)];
+  }
+  /* Second-rank statement. Sits in a narrow column, so it takes the step
+     below `display-lg` — at lg it ran ten lines and out-shouted the
+     mission block above it. */
+  .display-md {
+    @apply font-display text-[24px] font-normal leading-[1.28] tracking-[-0.025em] md:text-[30px];
+  }
+  .display-sm {
+    @apply font-display text-[20px] font-normal leading-[1.3] tracking-[-0.015em] md:text-[22px];
+  }
+
+  /* Eyebrow. Mono, like every other small uppercase element on the page —
+     it used to be the one that was set in the sans. */
+  .label {
+    @apply flex items-center font-mono text-[11px] font-medium tracking-[.08em] text-ace-black uppercase md:text-[12px];
+  }
+
+  /* Accordion */
+  .acc-item {
+    @apply py-[14px] border-t border-ace-line;
+  }
+  .acc-item:first-of-type {
+    @apply border-t-0;
+  }
+  .acc-head {
+    @apply flex justify-between items-center cursor-pointer;
+  }
+  /* First child only — the second span is the +/x icon, which keeps its own
+     mono glyph and must not pick up the serif. */
+  .acc-head > span:first-child {
+    @apply font-display text-[20px] font-normal leading-[1.3] tracking-[-0.015em] transition-colors duration-200 md:text-[22px];
+  }
+  .acc-head:hover > span:first-child {
+    @apply text-ace-red;
+  }
+  .acc-head .icon {
+    @apply relative w-6 h-6 border border-ace-line rounded flex-none transition-colors duration-200;
+  }
+  .acc-head:hover .icon {
+    @apply border-ace-red;
+  }
+  .acc-head .icon::after {
+    content: "+";
+    @apply absolute inset-0 flex items-center justify-center text-ace-red font-medium transition-transform duration-200;
+  }
+  /* Open state turns the + into an x rather than swapping the glyph. */
+  .acc-head[aria-expanded="true"] .icon::after {
+    @apply rotate-45;
+  }
+  .acc-item p {
+    @apply mt-3 text-[13px] text-ace-muted leading-[1.5] w-full max-w-[348px];
+  }
+
+  /* Stats */
+  .stats {
+    @apply flex flex-col gap-8 md:gap-16;
+  }
+  /* Regular weight — Cardo ships 400/700 and the bold cut reads heavy
+     against the rest of the page. */
+  .stat .num {
+    @apply font-display text-[60px] font-normal leading-none tracking-[-.02em] md:text-[88px];
+  }
+  .stat .num sup {
+    @apply text-[28px] text-ace-red md:text-[40px];
+  }
+  .stat .cap {
+    @apply mt-2 font-mono text-[11px] font-medium tracking-[.08em] text-ace-muted uppercase md:text-[12px];
+  }
+}
