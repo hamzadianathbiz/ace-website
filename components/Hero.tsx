@@ -113,17 +113,28 @@ export default function Hero() {
   }`
 
   return (
-    <section className="bg-ace-cream pb-20 pt-5 md:pb-28">
+    // From md up the hero is a fixed-height column sized to the viewport
+    // minus the 100px header, so the headline, subhead and CTA are all above
+    // the fold without scrolling. The card takes whatever height is left
+    // rather than holding its aspect ratio — on a 900px-tall screen that is
+    // a wide band, on a tall one it caps at the spec's 643px. Mobile keeps
+    // the aspect ratio: the card is already short enough there that the copy
+    // fits on its own.
+    <section className="bg-ace-cream pb-20 pt-5 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8">
       <noscript>
         {/* Without JS the phase never advances, so pin the image into its
             card and let the page behave normally. */}
         <style>{`.hero-frame{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:1rem!important;z-index:auto!important}`}</style>
       </noscript>
 
-      <div className="mx-auto w-full max-w-[1128px] px-4 md:px-6">
-        {/* Card — 1128 x 643 in the spec, held as its aspect ratio. It keeps
-            its box for the whole sequence; only .hero-frame moves. */}
-        <div ref={cardRef} className="relative aspect-[1128/643] w-full">
+      <div className="mx-auto w-full max-w-[1128px] px-4 md:flex md:min-h-0 md:flex-1 md:flex-col md:px-6">
+        {/* Card. min-h-0 is what lets flex-1 actually shrink it — without it
+            a flex item will not go below its content size. It keeps its box
+            for the whole sequence; only .hero-frame moves. */}
+        <div
+          ref={cardRef}
+          className="relative aspect-[1128/643] w-full md:aspect-auto md:max-h-[643px] md:min-h-[260px] md:flex-1"
+        >
           <div className="hero-frame absolute inset-0 overflow-hidden rounded-2xl" style={frameStyle}>
             {/*
               Statically imported rather than referenced by path: that is
@@ -146,7 +157,7 @@ export default function Hero() {
         </div>
 
         {/* Content block — 810px wide, centred, 32px rhythm. */}
-        <div className="mx-auto mt-12 flex w-full max-w-[810px] flex-col items-center gap-8 md:mt-14">
+        <div className="mx-auto mt-12 flex w-full max-w-[810px] flex-none flex-col items-center gap-8 md:mt-8 md:gap-6">
           <h1 className={`display-xl text-center text-black ${rise}`} style={{ transitionDelay: '260ms' }}>
             AI For Lower-Mid and Mid-Market Private Capital
           </h1>
