@@ -1,3 +1,5 @@
+import Image from 'next/image'
+import serveImage from '@/public/assets/web/who-we-serve.png'
 import CallCta from '@/components/CallCta'
 
 const CLIENTS = [
@@ -47,8 +49,15 @@ export default function Capability() {
       </div>
       {/* The floating pill that sat here read as a toggle but did nothing.
           Removed rather than restyled. */}
-      <div className="ph w-full h-[300px] md:w-[608px] md:h-[760px]">
-        Image placeholder
+      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[760px] md:w-[608px]">
+        <Image
+          src={serveImage}
+          alt=""
+          fill
+          placeholder="blur"
+          sizes="(max-width: 768px) 100vw, 608px"
+          className="object-cover"
+        />
       </div>
     </section>
   )

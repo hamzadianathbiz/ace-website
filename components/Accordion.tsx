@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
+import buildImage from '@/public/assets/web/what-we-build.png'
 import CallCta from '@/components/CallCta'
 
 /* The six systems. This is the deployable surface area, not a service menu. */
@@ -39,8 +41,15 @@ export default function Accordion() {
       id="what-we-build"
       className="flex scroll-mt-24 flex-col gap-8 px-4 py-[48px] md:flex-row md:items-center md:gap-[124px] md:pr-gutter md:pl-2"
     >
-      <div className="w-full h-[300px] flex-none ph md:w-[608px] md:h-[608px]">
-        Image placeholder
+      <div className="relative h-[300px] w-full flex-none overflow-hidden rounded-2xl md:h-[608px] md:w-[608px]">
+        <Image
+          src={buildImage}
+          alt=""
+          fill
+          placeholder="blur"
+          sizes="(max-width: 768px) 100vw, 608px"
+          className="object-cover"
+        />
       </div>
       <div className="w-full flex flex-col gap-8 md:w-[360px]">
         <span className="label">What We Build</span>

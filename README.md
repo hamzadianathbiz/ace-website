@@ -110,7 +110,6 @@ The framework preset **must** stay set to Next.js. With no preset, Vercel runs t
 
 ## Known TODOs
 
-- Two image placeholders, in Who We Serve (`components/Capability.tsx`) and What We Build (`components/Accordion.tsx`).
 - The three figures in `components/Company.tsx` come from a single client engagement and carry an attribution line saying so. They are pending final sign-off — do not present them as blended averages.
 - Unused assets kept for reference, safe to delete: `public/assets/web/hero-halftone.png`, `hero-skyline.png`, `hero-cityscape.mp4`, `hero-horse.mp4`, and `components/DitherField.tsx`.
 - No Prettier config in the repo. Running `prettier` uses its defaults (semicolons, double quotes), which do not match the codebase style. Add a `.prettierrc` before wiring up format-on-save.

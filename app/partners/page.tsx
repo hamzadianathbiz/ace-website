@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
+import partnersImage from '@/public/assets/web/partners.png'
 import Header from '@/components/Header'
 import PartnerProgram from '@/components/PartnerProgram'
 import Footer from '@/components/Footer'
@@ -28,6 +30,20 @@ export default function Partners() {
             client stays. Not a referral scheme with a fee attached.
           </p>
           <CallCta label="Become a Partner" />
+        </div>
+      </section>
+      {/* object-bottom: the group sits in the lower third of the source, and
+          a centre crop of a portrait frame at this ratio cuts them off. */}
+      <section className="px-4 pb-4 md:px-6">
+        <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl">
+          <Image
+            src={partnersImage}
+            alt=""
+            fill
+            placeholder="blur"
+            sizes="(max-width: 1128px) 100vw, 1128px"
+            className="object-cover object-bottom"
+          />
         </div>
       </section>
       <PartnerProgram />
