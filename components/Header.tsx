@@ -28,14 +28,7 @@ export default function Header() {
     <header className="bg-ace-cream">
       <div className="mx-auto flex h-[100px] w-full max-w-[1128px] items-center justify-between px-4 md:px-6">
         <Link href="/" aria-label="ACE — AI Deployment Co." className="flex items-center">
-          {/* data-ace-logo: the hero intro measures this to know where to fly
-              its white lockup to. Keep the attribute if the markup moves. */}
-          <img
-            data-ace-logo
-            src="/assets/web/ace-logomark.png"
-            alt=""
-            className="h-10 w-auto md:h-12"
-          />
+          <img src="/assets/web/ace-logomark.png" alt="" className="h-10 w-auto md:h-12" />
         </Link>
 
         <nav className="hidden items-center gap-10 lg:flex">
