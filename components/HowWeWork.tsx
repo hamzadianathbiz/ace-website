@@ -36,16 +36,15 @@ export default function HowWeWork() {
             text, so the tint runs stronger than a typical dark-card overlay. */}
         <div className="absolute inset-0 bg-black/55" />
 
-        <div className="relative flex flex-col gap-8 px-6 py-14 text-white md:px-14 md:py-20">
+        <div className="relative flex flex-col gap-10 px-6 py-14 text-white md:gap-16 md:px-14 md:py-20">
           <span className="label text-white">How We Work</span>
-          <div className="flex flex-col gap-4 md:flex-row">
+          {/* No card surface — the copy sits straight on the photograph, so
+              the column gap is what separates the two halves. */}
+          <div className="flex flex-col gap-10 md:flex-row md:gap-16">
             {TILES.map((tile) => (
-              <div
-                key={tile.num}
-                className="flex min-h-[280px] flex-1 flex-col justify-end gap-6 rounded-2xl border border-white/15 bg-white/10 p-8 backdrop-blur-md md:min-h-[420px] md:p-12"
-              >
+              <div key={tile.num} className="flex flex-1 flex-col gap-6">
                 <div className="flex flex-col gap-4">
-                  <span className="font-mono text-[11px] tracking-[.08em] text-ace-red md:text-[12px]">
+                  <span className="font-display text-[14px] text-ace-red md:text-[16px]">
                     {tile.num}
                   </span>
                   <h2 className="display-lg">{tile.title}</h2>
@@ -53,7 +52,7 @@ export default function HowWeWork() {
                     {tile.body}
                   </p>
                 </div>
-                <div>
+                <div className="mt-auto pt-2">
                   <CallCta variant="on-film" />
                 </div>
               </div>

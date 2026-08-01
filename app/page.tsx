@@ -4,7 +4,6 @@ import HowWeWork from '@/components/HowWeWork'
 import Capability from '@/components/Capability'
 import EditorialTopic from '@/components/EditorialTopic'
 import Accordion from '@/components/Accordion'
-import Company from '@/components/Company'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -16,7 +15,6 @@ export default function Home() {
       <Capability />
       <EditorialTopic />
       <Accordion />
-      <Company />
       <Footer />
     </>
   )

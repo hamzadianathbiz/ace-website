@@ -12,16 +12,17 @@ export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
 
 /*
   The marketing story is one page, so most of these are in-page anchors and
-  the ids live on the sections themselves — keep the two in step. Partners
-  is its own route: it speaks to a different audience than the rest.
+  the ids live on the sections themselves — keep the two in step. Company
+  and Partners are their own routes.
 
   The anchors are absolute, not bare hashes, so they still resolve from
-  /partners rather than pointing at ids that only exist on the home page.
+  /company and /partners rather than pointing at ids that only exist on the
+  home page.
 */
 export const SECTIONS = {
   whoWeAre: '/#who-we-are',
   clients: '/#who-we-serve',
   build: '/#what-we-build',
-  company: '/#company',
+  company: '/company',
   partners: '/partners',
 } as const

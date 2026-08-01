@@ -31,18 +31,17 @@ export default function Partners() {
           <CallCta label="Become a Partner" />
         </div>
       </section>
-      {/* contain, not cover: a crop at this ratio was cutting the group off
-          at the bottom. Letterboxed on ace-sand instead, so the whole frame
-          shows. */}
+      {/* The source is a native 16:9, so cover fills the frame without
+          cropping anything — no letterbox needed. */}
       <section className="px-4 pb-4 md:px-6">
-        <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl bg-ace-sand">
+        <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl">
           <Image
             src={partnersImage}
             alt=""
             fill
             placeholder="blur"
             sizes="(max-width: 1128px) 100vw, 1128px"
-            className="object-contain"
+            className="object-cover"
           />
         </div>
       </section>
