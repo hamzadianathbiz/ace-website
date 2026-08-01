@@ -13,7 +13,7 @@ const COLUMNS: FooterColumn[] = [
   {
     title: 'Site',
     items: [
-      { num: '1.1', label: 'Approach', href: SECTIONS.approach },
+      { num: '1.1', label: 'Who We Are', href: SECTIONS.whoWeAre },
       { num: '1.2', label: 'Who We Serve', href: SECTIONS.clients },
       { num: '1.3', label: 'What We Build', href: SECTIONS.build },
       { num: '1.4', label: 'Company', href: SECTIONS.company },

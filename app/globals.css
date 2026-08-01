@@ -146,20 +146,4 @@
   .acc-item p {
     @apply mt-3 text-[13px] text-ace-muted leading-[1.5] w-full max-w-[348px];
   }
-
-  /* Stats */
-  .stats {
-    @apply flex flex-col gap-8 md:gap-16;
-  }
-  /* Regular weight — Cardo ships 400/700 and the bold cut reads heavy
-     against the rest of the page. */
-  .stat .num {
-    @apply font-display text-[60px] font-normal leading-none tracking-[-.02em] md:text-[88px];
-  }
-  .stat .num sup {
-    @apply text-[28px] text-ace-red md:text-[40px];
-  }
-  .stat .cap {
-    @apply mt-2 font-mono text-[11px] font-medium tracking-[.08em] text-ace-muted uppercase md:text-[12px];
-  }
 }

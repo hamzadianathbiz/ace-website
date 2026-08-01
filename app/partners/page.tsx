@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import partnersImage from '@/public/assets/web/partners.png'
 import Header from '@/components/Header'
-import PartnerProgram from '@/components/PartnerProgram'
 import Footer from '@/components/Footer'
 import CallCta from '@/components/CallCta'
 
@@ -32,21 +31,24 @@ export default function Partners() {
           <CallCta label="Become a Partner" />
         </div>
       </section>
-      {/* object-bottom: the group sits in the lower third of the source, and
-          a centre crop of a portrait frame at this ratio cuts them off. */}
+      {/* contain, not cover: a crop at this ratio was cutting the group off
+          at the bottom. Letterboxed on ace-sand instead, so the whole frame
+          shows. */}
       <section className="px-4 pb-4 md:px-6">
-        <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl">
+        <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl bg-ace-sand">
           <Image
             src={partnersImage}
             alt=""
             fill
             placeholder="blur"
             sizes="(max-width: 1128px) 100vw, 1128px"
-            className="object-cover object-bottom"
+            className="object-contain"
           />
         </div>
       </section>
-      <PartnerProgram />
+      {/* PartnerProgram (the black pillars card) removed per Hamza — section
+          is being reworked. Component left in place at
+          components/PartnerProgram.tsx, just unrendered. */}
       <Footer />
     </>
   )

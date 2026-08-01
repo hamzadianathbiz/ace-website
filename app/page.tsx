@@ -1,7 +1,6 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
-import Mission from '@/components/Mission'
-import FeatureTiles from '@/components/FeatureTiles'
+import HowWeWork from '@/components/HowWeWork'
 import Capability from '@/components/Capability'
 import EditorialTopic from '@/components/EditorialTopic'
 import Accordion from '@/components/Accordion'
@@ -13,8 +12,7 @@ export default function Home() {
     <>
       <Header />
       <Hero />
-      <Mission />
-      <FeatureTiles />
+      <HowWeWork />
       <Capability />
       <EditorialTopic />
       <Accordion />

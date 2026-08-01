@@ -1,16 +1,5 @@
 import CallCta from '@/components/CallCta'
 
-/*
-  Real measured figures from a single engagement, not blended averages across
-  a client base — the attribution line below the block says so explicitly.
-  Do not add a number here that cannot be traced to a specific engagement.
-*/
-const STATS = [
-  { value: '47', unit: '%', caption: 'Less time preparing for investment committee' },
-  { value: '3.6', unit: 'X', caption: 'Faster monthly reporting cycle' },
-  { value: '61', unit: '%', caption: 'Fewer buyer diligence questions at exit' },
-]
-
 export default function Company() {
   return (
     <section
@@ -33,21 +22,6 @@ export default function Company() {
         <div>
           <CallCta variant="solid" />
         </div>
-        <div className="stats">
-          {STATS.map((stat) => (
-            <div className="stat" key={stat.caption}>
-              <div className="num">
-                {stat.value}
-                <sup>{stat.unit}</sup>
-              </div>
-              <div className="cap">{stat.caption}</div>
-            </div>
-          ))}
-        </div>
-        <p className="font-mono text-[11px] leading-[1.5] tracking-[.04em] text-ace-muted md:text-[12px]">
-          Measured over a 14-month engagement with a $450M buyout fund. Named on
-          request, with the client&rsquo;s permission.
-        </p>
       </div>
     </section>
   )

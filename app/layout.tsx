@@ -24,10 +24,10 @@ const mono = IBM_Plex_Mono({
 })
 
 /*
-  The one serif on the page — hero headline, the statement paragraphs, the
-  stat numbers. Cardo came in with the hero spec and now carries all of it;
-  Cormorant Garamond used to hold the rest and having two serifs on one page
-  was a mismatch.
+  The one serif on the page — hero headline, the statement paragraphs, tile
+  and section titles. Cardo came in with the hero spec and now carries all
+  of it; Cormorant Garamond used to hold the rest and having two serifs on
+  one page was a mismatch.
 */
 const display = Cardo({
   subsets: ['latin'],

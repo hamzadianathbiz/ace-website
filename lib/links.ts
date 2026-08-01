@@ -19,7 +19,7 @@ export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
   /partners rather than pointing at ids that only exist on the home page.
 */
 export const SECTIONS = {
-  approach: '/#approach',
+  whoWeAre: '/#who-we-are',
   clients: '/#who-we-serve',
   build: '/#what-we-build',
   company: '/#company',
