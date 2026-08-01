@@ -11,10 +11,12 @@ import CallCta from '@/components/CallCta'
   centred content block beneath it. Those are held as proportions here so
   the layout holds above and below 1280 rather than only at it.
 
-  Opening: the image lands full-bleed over the whole viewport with the white
-  ACE lockup and its line centred on it, holds, then shrinks into the card
-  while the lockup fades out where it stands — no travel, it simply goes.
-  The copy rises in as the image is on its way down.
+  Opening, in four beats: the image lands full-bleed over the whole viewport
+  with the white ACE lockup and its line centred on it; it holds; the lockup
+  fades out where it stands, with nothing else moving; and only once it has
+  gone does the image shrink into the card. The two are sequential on
+  purpose — the lockup gets the frame to itself on the way out. The copy
+  rises in as the image is on its way down.
 
   This component is only ever rendered on the home page, which is what keeps
   the intro off /company and /partners.
@@ -32,20 +34,24 @@ import CallCta from '@/components/CallCta'
   - Under prefers-reduced-motion the whole sequence is skipped on mount.
 */
 
-type Phase = 'cover' | 'shrinking' | 'settled'
+/*
+  cover   — full-bleed, lockup fading in and holding
+  fading  — lockup on its way out, image still full-bleed and still
+  shrinking — lockup gone, image on its way into the card
+*/
+type Phase = 'cover' | 'fading' | 'shrinking' | 'settled'
 
 /*
-  How long the full-bleed frame holds before it starts to shrink, counted
-  from the moment the image is on screen. The lockup's fade-in runs inside
-  this window, so the still moment is HOLD_MS minus LOGO_IN_MS — long
-  enough to read the line underneath.
+  How long the full-bleed frame holds before the lockup starts to leave,
+  counted from the moment the image is on screen. The lockup's fade-in runs
+  inside this window, so the still moment is HOLD_MS minus LOGO_IN_MS.
 */
-const HOLD_MS = 1600
+const HOLD_MS = 1300
 /** The shrink itself. Long on purpose — this is the calm part. */
 const SHRINK_MS = 1300
-/** The lockup's own fade, in and back out. Slower out than in. */
+/** The lockup's own fade. The way out is its own beat, so it can be slow. */
 const LOGO_IN_MS = 700
-const LOGO_OUT_MS = 950
+const LOGO_OUT_MS = 1000
 
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -68,10 +74,18 @@ export default function Hero() {
     return () => window.clearTimeout(bail)
   }, [])
 
+  // Beat one: hold the full-bleed frame, then start the lockup out.
   useEffect(() => {
     if (!ready || phase !== 'cover') return
+    const hold = window.setTimeout(() => setPhase('fading'), HOLD_MS)
+    return () => window.clearTimeout(hold)
+  }, [ready, phase])
 
-    const hold = window.setTimeout(() => {
+  // Beat two: once the lockup has gone, and not before, move the image.
+  useEffect(() => {
+    if (phase !== 'fading') return
+
+    const gone = window.setTimeout(() => {
       const card = cardRef.current
       if (!card) return setPhase('settled')
       // Measured at the moment of transition rather than on mount: fonts
@@ -79,10 +93,10 @@ export default function Hero() {
       // a stale rect would land the image slightly off its own box.
       setTarget(card.getBoundingClientRect())
       setPhase('shrinking')
-    }, HOLD_MS)
+    }, LOGO_OUT_MS)
 
-    return () => window.clearTimeout(hold)
-  }, [ready, phase])
+    return () => window.clearTimeout(gone)
+  }, [phase])
 
   // Hand the image back to the card once it has arrived, so it tracks the
   // card on scroll and resize instead of staying pinned to the viewport.
@@ -103,8 +117,10 @@ export default function Hero() {
 
   const settled = phase === 'settled'
   // The copy starts rising while the image is still on its way down, so the
-  // two read as one movement rather than two events.
-  const revealed = phase !== 'cover'
+  // two read as one movement rather than two events. Tied to the shrink
+  // specifically, not to "past cover" — during the fade beat nothing but
+  // the lockup should be moving.
+  const revealed = phase === 'shrinking' || settled
 
   const frameStyle: React.CSSProperties = settled
     ? {}
@@ -152,10 +168,11 @@ export default function Hero() {
         <style>{`.hero-frame{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:1rem!important;z-index:auto!important}.hero-intro-logo{display:none!important}`}</style>
       </noscript>
 
-      {/* Sits above the full-bleed frame, and unmounts once the intro is
-          over so it can never intercept a click. Lockup and line fade as
-          one block rather than separately — they read as a single mark. */}
-      {!settled && (
+      {/* Sits above the full-bleed frame. Mounted for the two beats it is
+          part of and dropped the moment the shrink begins, by which point
+          it has already faded to nothing. Lockup and line fade as one block
+          rather than separately — they read as a single mark. */}
+      {(phase === 'cover' || phase === 'fading') && (
         <div
           className="hero-intro-logo pointer-events-none fixed inset-0 z-[70] flex flex-col items-center justify-center gap-7 px-6"
           style={introStyle}
