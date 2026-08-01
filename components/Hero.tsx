@@ -157,7 +157,7 @@ export default function Hero() {
           one block rather than separately — they read as a single mark. */}
       {!settled && (
         <div
-          className="hero-intro-logo pointer-events-none fixed inset-0 z-[70] flex flex-col items-center justify-center gap-6"
+          className="hero-intro-logo pointer-events-none fixed inset-0 z-[70] flex flex-col items-center justify-center gap-7 px-6"
           style={introStyle}
         >
           <img
@@ -165,7 +165,9 @@ export default function Hero() {
             alt=""
             className="w-[min(400px,62vw)]"
           />
-          <p className="text-center font-mono text-[11px] uppercase tracking-[.18em] text-white/70 md:text-[13px]">
+          {/* The site's display face, at display scale. Cardo ships a real
+              700, so bold here is the cut rather than a synthesised one. */}
+          <p className="display-lg max-w-[620px] text-center font-bold text-white">
             Accelerating Company Excellence
           </p>
         </div>

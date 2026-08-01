@@ -29,9 +29,15 @@ const mono = IBM_Plex_Mono({
   of it; Cormorant Garamond used to hold the rest and having two serifs on
   one page was a mismatch.
 */
+/*
+  400 carries everything on the page. 700 is loaded for one thing only —
+  the intro lockup's line, which is set bold on purpose. Cardo ships both
+  cuts, so this is the real 700 rather than a browser-synthesised one; do
+  not reach for font-bold elsewhere without deciding it belongs there.
+*/
 const display = Cardo({
   subsets: ['latin'],
-  weight: ['400'],
+  weight: ['400', '700'],
   display: 'swap',
   variable: '--font-display',
 })
