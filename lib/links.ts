@@ -20,7 +20,7 @@ export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
   home page.
 */
 export const SECTIONS = {
-  whoWeAre: '/#who-we-are',
+  howWeWork: '/#how-we-work',
   clients: '/#who-we-serve',
   build: '/#what-we-build',
   company: '/company',

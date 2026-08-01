@@ -13,7 +13,7 @@ const COLUMNS: FooterColumn[] = [
   {
     title: 'Site',
     items: [
-      { num: '1.1', label: 'Who We Are', href: SECTIONS.whoWeAre },
+      { num: '1.1', label: 'How We Work', href: SECTIONS.howWeWork },
       { num: '1.2', label: 'Who We Serve', href: SECTIONS.clients },
       { num: '1.3', label: 'What We Build', href: SECTIONS.build },
       { num: '1.4', label: 'Company', href: SECTIONS.company },
@@ -53,7 +53,7 @@ export default function Footer() {
                     {/* Display face like every other number on the site. Sized
                         to the footer's own scale rather than the sections' —
                         "same font" is the typeface, not the size. */}
-                    <span className="w-[4.5em] flex-none text-left font-display text-[13px] text-ace-gray3 md:text-[14px]">
+                    <span className="w-[4.5em] flex-none text-left font-display text-[13px] text-ace-red md:text-[14px]">
                       {item.num}
                     </span>
                     <span className="normal-case">{item.label}</span>
@@ -75,7 +75,7 @@ export default function Footer() {
           <div className="flex w-auto items-baseline gap-2 md:w-2/5">
             {/* Sits in the same left column as the ordinals above it, so it
                 takes the same treatment. */}
-            <span className="w-[4.5em] flex-none font-display text-[13px] text-ace-gray3 md:text-[14px]">
+            <span className="w-[4.5em] flex-none font-display text-[13px] text-ace-red md:text-[14px]">
               © 2026
             </span>
             <span>

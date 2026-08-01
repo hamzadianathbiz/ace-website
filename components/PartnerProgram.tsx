@@ -33,7 +33,7 @@ export default function PartnerProgram() {
         <div className="flex flex-col gap-10 md:flex-row md:gap-12">
           {PILLARS.map((pillar) => (
             <div key={pillar.num} className="flex flex-1 flex-col gap-4 border-t border-white/20 pt-6">
-              <span className="ordinal text-white">{pillar.num}</span>
+              <span className="ordinal">{pillar.num}</span>
               <h2 className="display-sm">{pillar.title}</h2>
               <p className="text-[15px] leading-[1.6] text-white/70 md:text-base">{pillar.body}</p>
             </div>

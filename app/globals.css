@@ -110,16 +110,21 @@
   .label {
     @apply flex items-center font-mono text-[11px] font-medium tracking-[.08em] text-ace-black uppercase md:text-[12px];
   }
+  /* Red tick ahead of every eyebrow. Square rather than round, to echo the
+     angular logomark. Fixed colour, so it holds on dark ground too. */
+  .label::before {
+    content: "";
+    @apply mr-[10px] h-[6px] w-[6px] flex-none bg-ace-red;
+  }
 
   /*
     Section ordinals — the 01/02/03 that number the items in a list. One
-    class so the face is a single decision across every section; the colour
-    is left to the call site, since these sit on both light and dark ground.
-    Sized above the eyebrow because the serif reads smaller than the mono
-    did at the same nominal size.
+    class so both the face and the colour are a single decision everywhere,
+    on light ground and dark alike. Sized above the eyebrow because the
+    serif reads smaller than the mono did at the same nominal size.
   */
   .ordinal {
-    @apply font-display text-[14px] font-normal leading-none md:text-[16px];
+    @apply font-display text-[14px] font-normal leading-none text-ace-red md:text-[16px];
   }
 
   /* Accordion */

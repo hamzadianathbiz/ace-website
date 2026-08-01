@@ -16,9 +16,7 @@ export default function Company() {
           ACE is an AI advisory and deployment firm for lower-mid and mid-market
           private capital enterprise. We work with institutions as enablers to
           the future of the financial and operational industry.{' '}
-          <span className="font-medium text-ace-black">
-            Accelerating Company Excellence.
-          </span>
+          <span className="text-ace-red">Accelerating Company Excellence.</span>
         </p>
         <div>
           <CallCta variant="solid" />

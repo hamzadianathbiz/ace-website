@@ -11,9 +11,13 @@ import CallCta from '@/components/CallCta'
   centred content block beneath it. Those are held as proportions here so
   the layout holds above and below 1280 rather than only at it.
 
-  Opening: the image lands full-bleed over the whole viewport, holds, then
-  shrinks into the card and lets the page appear behind it. The copy rises
-  in as the image is on its way down.
+  Opening: the image lands full-bleed over the whole viewport with the white
+  ACE lockup centred on it, holds, then shrinks into the card while the
+  lockup flies up to the header and vanishes into the red logomark already
+  sitting there. The copy rises in as the image is on its way down.
+
+  This component is only ever rendered on the home page, which is what keeps
+  the intro off /company and /partners.
 
   How it is wired:
   - The card div is always in flow and always reserves its box, so there is
@@ -35,10 +39,15 @@ const HOLD_MS = 900
 /** The shrink itself. Long on purpose — this is the calm part. */
 const SHRINK_MS = 1300
 
+/** Where the centred lockup has to travel to land on the header logomark. */
+type Flight = { dx: number; dy: number; scale: number }
+
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
+  const logoRef = useRef<HTMLImageElement>(null)
   const [phase, setPhase] = useState<Phase>('cover')
   const [target, setTarget] = useState<DOMRect | null>(null)
+  const [flight, setFlight] = useState<Flight | null>(null)
   // The hold is counted from when the image is actually on screen, not from
   // mount. Otherwise the full-bleed moment — the whole point of the intro —
   // is spent looking at the blur placeholder while the file decodes.
@@ -66,6 +75,27 @@ export default function Hero() {
       // and the image itself can still be settling before this point, and
       // a stale rect would land the image slightly off its own box.
       setTarget(card.getBoundingClientRect())
+
+      // Same reasoning for the lockup's flight path. The header logomark is
+      // behind the full-bleed frame at this point, not hidden, so it still
+      // measures — and both rects are viewport-relative, which is the frame
+      // the fixed overlay lives in.
+      const logo = logoRef.current
+      const mark = document.querySelector('[data-ace-logo]')
+      if (logo && mark) {
+        const from = logo.getBoundingClientRect()
+        const to = mark.getBoundingClientRect()
+        if (from.width > 0 && to.width > 0) {
+          setFlight({
+            dx: to.left + to.width / 2 - (from.left + from.width / 2),
+            dy: to.top + to.height / 2 - (from.top + from.height / 2),
+            // Width, not height: matching the lockup's width to the mark's
+            // is what makes it read as being swallowed by it.
+            scale: to.width / from.width,
+          })
+        }
+      }
+
       setPhase('shrinking')
     }, HOLD_MS)
 
@@ -112,6 +142,22 @@ export default function Hero() {
     revealed ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
   }`
 
+  /*
+    The lockup rides the same clock as the shrink, so the two read as one
+    movement. Opacity is held for the first stretch and then dropped, which
+    puts the fade at the end of the journey — it disappears into the mark
+    rather than on the way there.
+  */
+  const logoStyle: React.CSSProperties = {
+    transform: flight
+      ? `translate(${flight.dx}px, ${flight.dy}px) scale(${flight.scale})`
+      : 'translate(0px, 0px) scale(1)',
+    opacity: flight ? 0 : 1,
+    transition: `transform ${SHRINK_MS}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${Math.round(
+      SHRINK_MS * 0.55,
+    )}ms ease-in ${Math.round(SHRINK_MS * 0.45)}ms`,
+  }
+
   return (
     // From md up the hero is a fixed-height column sized to the viewport
     // minus the 100px header, so the headline, subhead and CTA are all above
@@ -123,9 +169,24 @@ export default function Hero() {
     <section className="bg-ace-cream pb-20 pt-5 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8">
       <noscript>
         {/* Without JS the phase never advances, so pin the image into its
-            card and let the page behave normally. */}
-        <style>{`.hero-frame{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:1rem!important;z-index:auto!important}`}</style>
+            card, drop the lockup that would otherwise sit there forever,
+            and let the page behave normally. */}
+        <style>{`.hero-frame{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:1rem!important;z-index:auto!important}.hero-intro-logo{display:none!important}`}</style>
       </noscript>
+
+      {/* Sits above the full-bleed frame, and unmounts once the intro is
+          over so it can never intercept a click. */}
+      {!settled && (
+        <div className="hero-intro-logo pointer-events-none fixed inset-0 z-[70] flex items-center justify-center">
+          <img
+            ref={logoRef}
+            src="/assets/web/ace-logo-white.png"
+            alt=""
+            className="w-[min(400px,62vw)]"
+            style={logoStyle}
+          />
+        </div>
+      )}
 
       <div className="mx-auto w-full max-w-[1128px] px-4 md:flex md:min-h-0 md:flex-1 md:flex-col md:px-6">
         {/* Card. min-h-0 is what lets flex-1 actually shrink it — without it

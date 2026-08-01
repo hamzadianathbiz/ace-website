@@ -22,7 +22,7 @@ const TILES = [
 
 export default function HowWeWork() {
   return (
-    <section id="who-we-are" className="scroll-mt-24 px-4 py-4 md:px-6">
+    <section id="how-we-work" className="scroll-mt-24 px-4 py-4 md:px-6">
       <div className="on-dark relative overflow-hidden rounded-2xl bg-ace-black">
         <Image
           src={factoryImage}
@@ -32,9 +32,14 @@ export default function HowWeWork() {
           sizes="(max-width: 1128px) 100vw, 1128px"
           className="object-cover"
         />
-        {/* The sunset half of the source is light enough to wash out white
-            text, so the tint runs stronger than a typical dark-card overlay. */}
-        <div className="absolute inset-0 bg-black/55" />
+        {/*
+          Tint plus a light blur. There is no card behind the copy any more,
+          so the photograph itself has to stop competing with it — softening
+          the detail and dropping the sunset's brightness is what buys the
+          headlines their contrast. backdrop-blur rather than a blur on the
+          image, which would feather the card's own edges.
+        */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[3px]" />
 
         <div className="relative flex flex-col gap-10 px-6 py-14 text-white md:gap-16 md:px-14 md:py-20">
           <span className="label text-white">How We Work</span>
@@ -44,9 +49,9 @@ export default function HowWeWork() {
             {TILES.map((tile) => (
               <div key={tile.num} className="flex flex-1 flex-col gap-6">
                 <div className="flex flex-col gap-4">
-                  <span className="ordinal text-white">{tile.num}</span>
+                  <span className="ordinal">{tile.num}</span>
                   <h2 className="display-lg">{tile.title}</h2>
-                  <p className="max-w-[420px] text-base leading-[1.6] text-white/75 md:text-[18px]">
+                  <p className="max-w-[420px] text-base leading-[1.6] text-white/85 md:text-[18px]">
                     {tile.body}
                   </p>
                 </div>
