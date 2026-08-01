@@ -44,9 +44,7 @@ export default function HowWeWork() {
             {TILES.map((tile) => (
               <div key={tile.num} className="flex flex-1 flex-col gap-6">
                 <div className="flex flex-col gap-4">
-                  <span className="font-display text-[14px] text-ace-red md:text-[16px]">
-                    {tile.num}
-                  </span>
+                  <span className="ordinal text-white">{tile.num}</span>
                   <h2 className="display-lg">{tile.title}</h2>
                   <p className="max-w-[420px] text-base leading-[1.6] text-white/75 md:text-[18px]">
                     {tile.body}

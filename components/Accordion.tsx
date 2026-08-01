@@ -5,31 +5,28 @@ import Image from 'next/image'
 import buildImage from '@/public/assets/web/what-we-build.png'
 import CallCta from '@/components/CallCta'
 
-/* The six systems. This is the deployable surface area, not a service menu. */
+/*
+  The four layers we deploy, stated as capability rather than product. The
+  named systems that sit underneath these — deal intelligence, IC memory,
+  portfolio models — are engagement-specific, so they belong in a scope of
+  work rather than on the website.
+*/
 const SYSTEMS = [
   {
-    title: 'Deal Intelligence',
-    body: 'Every deal the firm has ever looked at, structured at each stage and answerable in plain language.',
+    title: 'Organisational Company Brain',
+    body: 'Every document, deal, decision and conversation the firm has produced, held in one layer that answers questions in plain language. Partner memory becomes institutional memory, and it stops leaving when people do.',
   },
   {
-    title: 'IC Memory Layer',
-    body: 'Investment committee decisions, concerns and discussion held as structured records instead of partner memory.',
+    title: 'AI Agents',
+    body: 'Software that does the work rather than assisting with it. Agents that screen against your criteria, watch portfolio performance, and prepare the material a partner would otherwise build by hand.',
   },
   {
-    title: 'Diligence to Operating Plan',
-    body: 'Diligence findings converted into a structured operating plan the week the deal closes, not the quarter after.',
+    title: 'Agentic Workflows',
+    body: 'Whole processes wired end to end, where each step hands to the next without someone moving a file between them. The work runs on its own and surfaces when it needs a decision.',
   },
   {
-    title: 'Portfolio Performance Model',
-    body: 'One KPI schema across every portfolio company, with variance detection that runs whether or not anyone asks.',
-  },
-  {
-    title: 'Knowledge Graph',
-    body: 'Relationships and patterns across the full portfolio history, surfaced rather than rediscovered deal by deal.',
-  },
-  {
-    title: 'Exit Narrative Builder',
-    body: 'Exit readiness documented continuously, so preparation becomes retrieval instead of reconstruction.',
+    title: 'AI-Native Custom Software',
+    body: 'Where nothing off the shelf fits the way your firm actually operates, we build it. Internal tools designed around your process instead of your process bent around someone else’s product.',
   },
 ]
 

@@ -50,7 +50,12 @@ export default function Footer() {
                     rel={item.external ? 'noopener' : undefined}
                     className="flex transition-opacity duration-200 hover:opacity-70"
                   >
-                    <span className="w-[4.5em] flex-none text-left text-ace-gray3">{item.num}</span>
+                    {/* Display face like every other number on the site. Sized
+                        to the footer's own scale rather than the sections' —
+                        "same font" is the typeface, not the size. */}
+                    <span className="w-[4.5em] flex-none text-left font-display text-[13px] text-ace-gray3 md:text-[14px]">
+                      {item.num}
+                    </span>
                     <span className="normal-case">{item.label}</span>
                   </Link>
                 </li>
@@ -68,7 +73,11 @@ export default function Footer() {
             />
           </div>
           <div className="flex w-auto items-baseline gap-2 md:w-2/5">
-            <span className="w-[4.5em] flex-none text-ace-gray3">© 2026</span>
+            {/* Sits in the same left column as the ordinals above it, so it
+                takes the same treatment. */}
+            <span className="w-[4.5em] flex-none font-display text-[13px] text-ace-gray3 md:text-[14px]">
+              © 2026
+            </span>
             <span>
               All rights reserved, ACE — AI Deployment Co.
               <br />

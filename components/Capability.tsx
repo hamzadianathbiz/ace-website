@@ -36,9 +36,7 @@ export default function Capability() {
               key={client.num}
               className="flex items-baseline gap-4 border-t border-ace-line py-4 first:border-t-0"
             >
-              <span className="font-mono text-[11px] tracking-[.08em] text-ace-red md:text-[12px]">
-                {client.num}
-              </span>
+              <span className="ordinal text-ace-black">{client.num}</span>
               <span className="display-sm">{client.label}</span>
             </li>
           ))}

@@ -111,6 +111,17 @@
     @apply flex items-center font-mono text-[11px] font-medium tracking-[.08em] text-ace-black uppercase md:text-[12px];
   }
 
+  /*
+    Section ordinals — the 01/02/03 that number the items in a list. One
+    class so the face is a single decision across every section; the colour
+    is left to the call site, since these sit on both light and dark ground.
+    Sized above the eyebrow because the serif reads smaller than the mono
+    did at the same nominal size.
+  */
+  .ordinal {
+    @apply font-display text-[14px] font-normal leading-none md:text-[16px];
+  }
+
   /* Accordion */
   .acc-item {
     @apply py-[14px] border-t border-ace-line;
