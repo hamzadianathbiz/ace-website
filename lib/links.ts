@@ -24,6 +24,7 @@ export const SECTIONS = {
   verticals: '/#verticals',
   company: '/company',
   caseStudies: '/company#case-studies',
+  fulfillmentPartner: '/company#fulfillment-partner',
   ourStory: '/company#our-story',
   partners: '/partners',
 } as const

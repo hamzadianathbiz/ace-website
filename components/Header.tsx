@@ -14,8 +14,10 @@ const NAV: NavItem[] = [
   {
     label: 'Company',
     href: SECTIONS.company,
+    // Page order, so the menu reads the way the route scrolls.
     children: [
       { label: 'Case Studies', href: SECTIONS.caseStudies },
+      { label: 'Fulfillment Partner', href: SECTIONS.fulfillmentPartner },
       { label: 'Our Story', href: SECTIONS.ourStory },
     ],
   },
