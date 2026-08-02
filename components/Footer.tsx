@@ -1,4 +1,6 @@
+import Image from 'next/image'
 import Link from 'next/link'
+import footerImage from '@/public/assets/web/footer-interior.png'
 import { DISCOVERY_CALL, EMAIL, LINKEDIN, SECTIONS } from '@/lib/links'
 
 type FooterItem = { num: string; label: string; href: string; external?: boolean }
@@ -30,8 +32,26 @@ const COLUMNS: FooterColumn[] = [
 
 export default function Footer() {
   return (
-    <footer className="on-dark gutter bg-ace-black pb-8 text-white md:pb-10">
-      <div className="mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
+    <footer className="on-dark gutter relative overflow-hidden bg-ace-black pb-8 text-white md:pb-10">
+      {/*
+        The source is mostly unlit on the left with the window and sofa off
+        to the right, which is why it works behind a footer: the text sits
+        over the dark half and the picture reads in the space beside it.
+        Anchored right so that stays true as the viewport narrows, and
+        carrying a tint because the lit corner is bright enough to compete
+        with the copy that crosses it.
+      */}
+      <Image
+        src={footerImage}
+        alt=""
+        fill
+        placeholder="blur"
+        sizes="100vw"
+        className="object-cover object-right"
+      />
+      <div className="absolute inset-0 bg-ace-black/70" />
+
+      <div className="relative mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
         <nav className="flex flex-col gap-10 md:flex-row">
           {COLUMNS.map((col) => (
             <ul key={col.title} className="flex flex-col gap-[0.8rem] pr-[0.8rem] md:w-[340px]">
