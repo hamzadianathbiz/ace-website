@@ -117,6 +117,16 @@
     @apply mr-[10px] h-[6px] w-[6px] flex-none bg-ace-red;
   }
 
+  /* The same tick, for a section that leads with a display heading instead
+     of an eyebrow. Scaled up to sit against the larger type. */
+  .marked {
+    @apply flex items-center;
+  }
+  .marked::before {
+    content: "";
+    @apply mr-4 h-[10px] w-[10px] flex-none bg-ace-red;
+  }
+
   /*
     Section ordinals — the 01/02/03 that number the items in a list. One
     class so both the face and the colour are a single decision everywhere,
