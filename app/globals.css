@@ -21,10 +21,17 @@
     @apply outline-white;
   }
 
+  /*
+    Everything stops moving under Reduce Motion, except a subtree that opts
+    out with data-motion-ok. The hero intro uses that: on this path it is
+    opacity only — no travel, no zoom — and a fade is not what the setting
+    guards against. Without the exemption the intro degrades to a flicker,
+    which is worse for everyone than a slow fade.
+  */
   @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *:not([data-motion-ok], [data-motion-ok] *),
+    *:not([data-motion-ok], [data-motion-ok] *)::before,
+    *:not([data-motion-ok], [data-motion-ok] *)::after {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;

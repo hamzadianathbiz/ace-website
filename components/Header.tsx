@@ -34,6 +34,8 @@ const NAV_LINK =
 */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  // Which item's children are showing in the mobile menu. One at a time.
+  const [openSection, setOpenSection] = useState<string | null>(null)
 
   return (
     <header className="bg-ace-cream">
@@ -147,19 +149,39 @@ export default function Header() {
         <nav className="flex min-h-0 flex-1 flex-col justify-center gap-6 overflow-y-auto py-4">
           {NAV.map((item) => (
             <div key={item.label} className="flex flex-col gap-3">
-              <Link
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-between text-[28px] text-black/70 transition-colors duration-300 hover:text-black"
-              >
-                <span>{item.label}</span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black/40">
-                  <path d="M6 9l6 6 6-6" />
-                </svg>
-              </Link>
-              {/* There is no hover on a touch screen, so the children that
-                  live in a dropdown on desktop are simply listed here. */}
-              {item.children && (
+              {/*
+                Only an item that actually has children gets a chevron, and
+                there it is a real control: it opens the list rather than
+                following the link. Everything else is a plain link with
+                nothing beside it, since an arrow that does nothing just
+                reads as a broken affordance.
+              */}
+              <div className="flex items-center justify-between gap-4">
+                <Link
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-[28px] text-black/70 transition-colors duration-300 hover:text-black"
+                >
+                  {item.label}
+                </Link>
+                {item.children && (
+                  <button
+                    type="button"
+                    onClick={() => setOpenSection(openSection === item.label ? null : item.label)}
+                    aria-expanded={openSection === item.label}
+                    aria-label={`${openSection === item.label ? 'Hide' : 'Show'} ${item.label} sections`}
+                    className="flex h-10 w-10 flex-none items-center justify-center text-black/40 transition-colors duration-200 hover:text-black"
+                  >
+                    <ChevronDown
+                      aria-hidden
+                      className={`h-6 w-6 transition-transform duration-300 ${
+                        openSection === item.label ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                )}
+              </div>
+              {item.children && openSection === item.label && (
                 <div className="flex flex-col gap-3 pl-4">
                   {item.children.map((child) => (
                     <Link

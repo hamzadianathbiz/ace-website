@@ -63,12 +63,21 @@ export default function Hero() {
   // mount. Otherwise the full-bleed moment — the whole point of the intro —
   // is spent looking at the blur placeholder while the file decodes.
   const [ready, setReady] = useState(false)
+  const [reduced, setReduced] = useState(false)
 
+  /*
+    Reduce Motion used to skip the intro outright, which meant anyone with
+    the switch on in their phone's accessibility settings never saw it at
+    all. It now plays without the movement instead: the lockup still fades
+    up and out, and the frame arrives in its card with no travel. Opacity is
+    not what the setting is protecting against — sliding, zooming and
+    parallax are, and there is none of that left on this path.
+  */
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setPhase('settled')
-    }
+    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   }, [])
+
+  const shrinkMs = reduced ? 0 : SHRINK_MS
 
   /*
     A cached image can finish decoding before React hydrates, in which case
@@ -114,9 +123,9 @@ export default function Hero() {
   // card on scroll and resize instead of staying pinned to the viewport.
   useEffect(() => {
     if (phase !== 'shrinking') return
-    const done = window.setTimeout(() => setPhase('settled'), SHRINK_MS)
+    const done = window.setTimeout(() => setPhase('settled'), shrinkMs)
     return () => window.clearTimeout(done)
-  }, [phase])
+  }, [phase, shrinkMs])
 
   useEffect(() => {
     if (phase === 'settled') return
@@ -148,7 +157,7 @@ export default function Hero() {
         width: target ? target.width : '100vw',
         height: target ? target.height : '100vh',
         borderRadius: target ? '1rem' : 0,
-        transition: `top ${SHRINK_MS}ms, left ${SHRINK_MS}ms, width ${SHRINK_MS}ms, height ${SHRINK_MS}ms, border-radius ${SHRINK_MS}ms`,
+        transition: `top ${shrinkMs}ms, left ${shrinkMs}ms, width ${shrinkMs}ms, height ${shrinkMs}ms, border-radius ${shrinkMs}ms`,
         transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
       }
 
@@ -190,6 +199,7 @@ export default function Hero() {
           rather than separately — they read as a single mark. */}
       {(phase === 'cover' || phase === 'fading') && (
         <div
+          data-motion-ok
           className="hero-intro-logo pointer-events-none fixed inset-0 z-[70] flex flex-col items-center justify-center gap-7 px-6"
           style={introStyle}
         >
