@@ -32,7 +32,8 @@ import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
     without JS, who would otherwise be stuck on a full-screen image.
   - Scroll is locked until the image is home. Scrolling underneath a
     full-screen overlay just desynchronises the two.
-  - Under prefers-reduced-motion the whole sequence is skipped on mount.
+  - The sequence is identical on every device and under Reduce Motion; see
+    the note in the component for why.
 */
 
 /*
@@ -63,21 +64,20 @@ export default function Hero() {
   // mount. Otherwise the full-bleed moment — the whole point of the intro —
   // is spent looking at the blur placeholder while the file decodes.
   const [ready, setReady] = useState(false)
-  const [reduced, setReduced] = useState(false)
 
   /*
-    Reduce Motion used to skip the intro outright, which meant anyone with
-    the switch on in their phone's accessibility settings never saw it at
-    all. It now plays without the movement instead: the lockup still fades
-    up and out, and the frame arrives in its card with no travel. Opacity is
-    not what the setting is protecting against — sliding, zooming and
-    parallax are, and there is none of that left on this path.
-  */
-  useEffect(() => {
-    setReduced(window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  }, [])
+    The intro plays the same everywhere, including under Reduce Motion.
 
-  const shrinkMs = reduced ? 0 : SHRINK_MS
+    It has been through both extremes: skipped entirely on that setting,
+    which meant a phone with the switch on never saw it; then played with
+    the travel removed, which is what "starts well but abruptly disappears"
+    was — the frame arriving in its card with no transition to watch.
+
+    Hamza's call is that the sequence is the same on a phone as on a desktop.
+    It is one 1.3s ease on first paint, opacity and a settling frame, with no
+    parallax, loop or bounce, which is the mild end of what the setting
+    exists to catch. globals.css still stops everything else on the page.
+  */
 
   /*
     A cached image can finish decoding before React hydrates, in which case
@@ -123,9 +123,9 @@ export default function Hero() {
   // card on scroll and resize instead of staying pinned to the viewport.
   useEffect(() => {
     if (phase !== 'shrinking') return
-    const done = window.setTimeout(() => setPhase('settled'), shrinkMs)
+    const done = window.setTimeout(() => setPhase('settled'), SHRINK_MS)
     return () => window.clearTimeout(done)
-  }, [phase, shrinkMs])
+  }, [phase])
 
   useEffect(() => {
     if (phase === 'settled') return
@@ -157,8 +157,12 @@ export default function Hero() {
         width: target ? target.width : '100vw',
         height: target ? target.height : '100vh',
         borderRadius: target ? '1rem' : 0,
-        transition: `top ${shrinkMs}ms, left ${shrinkMs}ms, width ${shrinkMs}ms, height ${shrinkMs}ms, border-radius ${shrinkMs}ms`,
+        transition: `top ${SHRINK_MS}ms, left ${SHRINK_MS}ms, width ${SHRINK_MS}ms, height ${SHRINK_MS}ms, border-radius ${SHRINK_MS}ms`,
         transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        // These four are layout properties, so each frame of the shrink is a
+        // reflow. Cheap enough on a desktop, tighter on a phone — the hint
+        // lets the browser prepare for it rather than discover it.
+        willChange: 'top, left, width, height',
       }
 
   const rise = `transition-[opacity,transform] duration-[900ms] ease-calm ${
