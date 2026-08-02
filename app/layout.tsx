@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { IBM_Plex_Mono, Schibsted_Grotesk, Cardo } from 'next/font/google'
+import 'lenis/dist/lenis.css'
 import './globals.css'
+import SmoothScroll from '@/components/SmoothScroll'
 
 /*
   Body font, sitewide — every piece of text on the page that is not a
@@ -80,7 +82,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`}>
-      <body className="bg-ace-cream font-sans text-ace-black">{children}</body>
+      <body className="bg-ace-cream font-sans text-ace-black">
+        <SmoothScroll />
+        {children}
+      </body>
     </html>
   )
 }

@@ -132,7 +132,10 @@ export default function Header() {
           </button>
         </div>
 
-        <nav className="flex flex-1 flex-col justify-center gap-6">
+        {/* min-h-0 lets the scroll actually engage inside a flex column. The
+            menu grew sub-items, and on a short phone the list can now be
+            taller than the space between the close button and the CTA. */}
+        <nav className="flex min-h-0 flex-1 flex-col justify-center gap-6 overflow-y-auto py-4">
           {NAV.map((item) => (
             <div key={item.label} className="flex flex-col gap-3">
               <Link

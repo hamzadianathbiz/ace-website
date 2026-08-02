@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import heroImage from '@/public/assets/web/hero-mosaic.png'
 import CallCta from '@/components/CallCta'
+import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
 
 /*
   Built to the supplied hero spec, which is expressed at a 1280px frame:
@@ -110,8 +111,12 @@ export default function Hero() {
     if (phase === 'settled') return
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+    // Smooth scrolling drives the page itself, so the overflow lock alone
+    // does not hold it — see lib/scroll-lock.
+    lockScroll()
     return () => {
       document.body.style.overflow = previous
+      unlockScroll()
     }
   }, [phase])
 
@@ -194,9 +199,12 @@ export default function Hero() {
         {/* Card. min-h-0 is what lets flex-1 actually shrink it — without it
             a flex item will not go below its content size. It keeps its box
             for the whole sequence; only .hero-frame moves. */}
+        {/* 4:3 on a phone rather than the desktop card's 1128/643: that ratio
+            on a 375px screen is a 195px letterbox strip with no presence.
+            From md up the height comes from the flex column instead. */}
         <div
           ref={cardRef}
-          className="relative aspect-[1128/643] w-full md:aspect-auto md:max-h-[643px] md:min-h-[260px] md:flex-1"
+          className="relative aspect-[4/3] w-full md:aspect-auto md:max-h-[643px] md:min-h-[260px] md:flex-1"
         >
           <div className="hero-frame absolute inset-0 overflow-hidden rounded-2xl" style={frameStyle}>
             {/*

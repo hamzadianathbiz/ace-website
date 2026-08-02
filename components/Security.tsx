@@ -22,12 +22,21 @@ export default function Security() {
           </p>
         </div>
 
-        <Image
-          src={complianceImage}
-          alt="GDPR ready. CCPA ready. ISO 27001 coming soon. SOC 2 auditing."
-          sizes="(max-width: 1128px) 100vw, 1128px"
-          className="h-auto w-full"
-        />
+        {/*
+          The strip is 3:1. Fitted to a phone it comes out ~110px tall and
+          "COMING SOON" lands at about 6px — there, but unreadable. Holding a
+          floor width and letting it scroll inside its own box keeps the
+          labels legible instead. Above that width the floor never binds, so
+          desktop is untouched.
+        */}
+        <div className="overflow-x-auto">
+          <Image
+            src={complianceImage}
+            alt="GDPR ready. CCPA ready. ISO 27001 coming soon. SOC 2 auditing."
+            sizes="(max-width: 1128px) 100vw, 1128px"
+            className="h-auto w-full min-w-[640px]"
+          />
+        </div>
       </div>
     </section>
   )

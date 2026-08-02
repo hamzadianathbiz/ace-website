@@ -28,14 +28,17 @@ export default function Partners() {
             collaborating on deployment opportunities with veterans of the
             industry.
           </p>
-          <CallCta label="Join The Waitlist" />
+          {/* No destination yet — the waitlist has nowhere to point. */}
+          <CallCta label="Join The Waitlist" href={null} />
         </div>
       </section>
-      {/* A 4:3 source in a 16:9 frame, so it gives up the top and bottom
-          eighth. That takes the upper window panes and the foreground floor
-          and leaves the skyline and the table, which is the picture. */}
+      {/* A 4:3 source. On a phone the frame matches it, so nothing is lost
+          and the figures stay big enough to read; a 16:9 crop there leaves a
+          193px band of silhouettes. From md up it takes the wider frame and
+          gives up the top and bottom eighth — the upper window panes and the
+          foreground floor — leaving the skyline and the table. */}
       <section className="px-4 pb-4 md:px-6">
-        <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl">
+        <div className="relative mx-auto aspect-[4/3] w-full max-w-[1128px] overflow-hidden rounded-2xl md:aspect-[16/9]">
           <Image
             src={partnersImage}
             alt=""
