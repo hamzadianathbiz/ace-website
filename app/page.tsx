@@ -1,8 +1,7 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
-import HowWeWork from '@/components/HowWeWork'
+import Services from '@/components/Services'
 import Capability from '@/components/Capability'
-import Accordion from '@/components/Accordion'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -10,9 +9,8 @@ export default function Home() {
     <>
       <Header />
       <Hero />
-      <HowWeWork />
+      <Services />
       <Capability />
-      <Accordion />
       <Footer />
     </>
   )

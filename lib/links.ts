@@ -7,7 +7,7 @@
 // Changing this one line changes every discovery-call button on the site.
 export const DISCOVERY_CALL = 'https://cal.com/acedeployed/ace-discovery'
 
-export const EMAIL = 'hamza@acedeployed.com'
+export const EMAIL = 'contact@acedeployed.com'
 export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
 
 /*
@@ -20,9 +20,8 @@ export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
   home page.
 */
 export const SECTIONS = {
-  howWeWork: '/#how-we-work',
-  clients: '/#who-we-serve',
-  build: '/#what-we-build',
+  services: '/#services',
+  verticals: '/#verticals',
   company: '/company',
   partners: '/partners',
 } as const

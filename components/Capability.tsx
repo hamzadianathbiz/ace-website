@@ -13,11 +13,11 @@ const CLIENTS = [
 export default function Capability() {
   return (
     <section
-      id="who-we-serve"
+      id="verticals"
       className="flex scroll-mt-24 flex-col gap-8 px-4 py-0 md:flex-row md:items-center md:pr-2 md:pl-gutter"
     >
       <div className="w-full flex flex-col gap-6 md:w-[449px]">
-        <span className="label">Who We Serve</span>
+        <span className="label">Verticals</span>
         <p className="text-base leading-[1.6] text-ace-ink md:text-[18px]">
           Private equity funds in the lower-mid and mid market, investment
           banks, M&amp;A boutiques, family offices, and the portfolio companies

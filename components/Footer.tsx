@@ -13,11 +13,10 @@ const COLUMNS: FooterColumn[] = [
   {
     title: 'Site',
     items: [
-      { num: '1.1', label: 'How We Work', href: SECTIONS.howWeWork },
-      { num: '1.2', label: 'Who We Serve', href: SECTIONS.clients },
-      { num: '1.3', label: 'What We Build', href: SECTIONS.build },
-      { num: '1.4', label: 'Company', href: SECTIONS.company },
-      { num: '1.5', label: 'Partner Program', href: SECTIONS.partners },
+      { num: '1.1', label: 'Services', href: SECTIONS.services },
+      { num: '1.2', label: 'Verticals', href: SECTIONS.verticals },
+      { num: '1.3', label: 'Company', href: SECTIONS.company },
+      { num: '1.4', label: 'Partner Program', href: SECTIONS.partners },
     ],
   },
   {
@@ -32,9 +31,9 @@ const COLUMNS: FooterColumn[] = [
 
 export default function Footer() {
   return (
-    <footer className="on-dark gutter bg-ace-black pb-8 text-white md:pb-12">
-      <div className="mx-auto max-w-[1440px] pt-[60px] font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-[82px] md:text-[12px]">
-        <div className="mb-16 md:mb-24">
+    <footer className="on-dark gutter bg-ace-black pb-8 text-white md:pb-10">
+      <div className="mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
+        <div className="mb-10 md:mb-14">
           <CallCta variant="on-film" />
         </div>
 
@@ -64,12 +63,14 @@ export default function Footer() {
           ))}
         </nav>
 
-        <div className="mt-[4rem] flex flex-col gap-6 md:mt-[14rem] md:items-start md:justify-between">
+        {/* The 14rem gap that used to sit here made the footer taller than
+            some of the sections above it. */}
+        <div className="mt-12 flex flex-col gap-6 md:mt-16 md:items-start md:justify-between">
           <div className="w-2/5">
             <img
-              src="/assets/web/ace-logo-tagline-white.png"
-              alt="ACE — AI Deployment Co."
-              className="w-[200px] h-auto md:w-[320px]"
+              src="/assets/web/ace-logo-white.png"
+              alt="ACE"
+              className="w-[150px] h-auto md:w-[200px]"
             />
           </div>
           <div className="flex w-auto items-baseline gap-2 md:w-2/5">
@@ -81,7 +82,7 @@ export default function Footer() {
             <span>
               All rights reserved, ACE — AI Deployment Co.
               <br />
-              Bangalore, India
+              1/1 Bore Bank Road, 560046, Bangalore, India
             </span>
           </div>
         </div>

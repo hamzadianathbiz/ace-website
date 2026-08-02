@@ -9,9 +9,8 @@ type NavItem = { label: string; href: string }
 
 // One page, so these are in-page anchors. Ids live on the sections.
 const NAV: NavItem[] = [
-  { label: 'How We Work', href: SECTIONS.howWeWork },
-  { label: 'Who We Serve', href: SECTIONS.clients },
-  { label: 'What We Build', href: SECTIONS.build },
+  { label: 'Services', href: SECTIONS.services },
+  { label: 'Verticals', href: SECTIONS.verticals },
   { label: 'Company', href: SECTIONS.company },
   { label: 'Partners', href: SECTIONS.partners },
 ]
