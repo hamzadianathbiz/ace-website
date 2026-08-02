@@ -3,6 +3,7 @@ import Hero from '@/components/Hero'
 import Advisory from '@/components/Advisory'
 import Deployment from '@/components/Deployment'
 import Capability from '@/components/Capability'
+import Security from '@/components/Security'
 import Footer from '@/components/Footer'
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <Advisory />
       <Deployment />
       <Capability />
+      <Security />
       <Footer />
     </>
   )

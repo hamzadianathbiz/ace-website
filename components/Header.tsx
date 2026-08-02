@@ -25,8 +25,20 @@ export default function Header() {
 
   return (
     <header className="bg-ace-cream">
-      <div className="mx-auto flex h-[100px] w-full max-w-[1128px] items-center justify-between px-4 md:px-6">
-        <Link href="/" aria-label="ACE — AI Deployment Co." className="flex items-center">
+      {/*
+        Three columns rather than justify-between: the logo and the CTA are
+        different widths, so space-between pushed the nav off centre by half
+        that difference. Equal 1fr rails on either side of an auto-width nav
+        centre it against the bar itself.
+      */}
+      <div className="mx-auto grid h-[100px] w-full max-w-[1128px] grid-cols-[1fr_auto_1fr] items-center px-4 md:px-6">
+        {/* justify-self-start: otherwise the link stretches across the whole
+            1fr rail and turns dead space into a click target. */}
+        <Link
+          href="/"
+          aria-label="ACE — AI Deployment Co."
+          className="flex items-center justify-self-start"
+        >
           <img src="/assets/web/ace-logomark.png" alt="" className="h-10 w-auto md:h-12" />
         </Link>
 
@@ -42,7 +54,7 @@ export default function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-end gap-4">
           <Link
             href={DISCOVERY_CALL}
             className="hidden rounded-xl border border-black/[0.08] bg-[#959595]/10 px-6 py-3 text-[16px] text-black transition-colors duration-200 hover:bg-[#959595]/20 md:inline-flex"

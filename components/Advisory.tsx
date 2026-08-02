@@ -32,7 +32,7 @@ export default function Advisory() {
           <CallCta variant="solid" />
         </div>
       </div>
-      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[720px] md:w-[608px]">
+      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[600px] md:w-[608px]">
         <Image
           src={advisoryImage}
           alt=""

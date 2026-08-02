@@ -224,16 +224,23 @@ export default function Hero() {
 
         {/* Content block — 810px wide, centred, 32px rhythm. */}
         <div className="mx-auto mt-12 flex w-full max-w-[810px] flex-none flex-col items-center gap-8 md:mt-8 md:gap-6">
-          <h1 className={`display-xl text-center text-black ${rise}`} style={{ transitionDelay: '260ms' }}>
+          {/* text-balance evens the line lengths rather than filling each
+              line before breaking — on a centred block that is the whole
+              difference between a tidy stack and a ragged one. */}
+          <h1
+            className={`display-xl text-balance text-center text-black ${rise}`}
+            style={{ transitionDelay: '260ms' }}
+          >
             AI For The Private Capital Industry
           </h1>
 
           <p
-            className={`mx-auto max-w-[716px] text-center text-[16px] leading-[1.7] tracking-[-0.017em] text-[#1C1A1A]/70 md:text-[18px] ${rise}`}
+            className={`mx-auto max-w-[680px] text-balance text-center text-[16px] leading-[1.7] tracking-[-0.017em] text-[#1C1A1A]/70 md:text-[18px] ${rise}`}
             style={{ transitionDelay: '440ms' }}
           >
             AI Advisory &amp; Deployment For Private Equity Funds, Investment
-            Banks, M&amp;A Boutiques, Family Offices, and PE-Backed PortCos.
+            Banks, M&amp;A Boutiques, Family Offices, and PE-Backed Portfolio
+            Companies.
           </p>
 
           <div className={rise} style={{ transitionDelay: '620ms' }}>

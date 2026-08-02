@@ -7,8 +7,9 @@ import CallCta from '@/components/CallCta'
   right. Text still comes first in the DOM — flex-row-reverse handles the
   visual swap, so reading order stays sensible.
 
-  The box is shorter than Advisory's because this source is landscape where
-  that one is portrait; both are 608 wide, so the column grid still lines up.
+  Same box as Advisory's. This source is landscape and that one is portrait,
+  so matching the box means each crops differently — the pair reading as a
+  pair is worth more than either one filling its frame exactly.
 */
 export default function Deployment() {
   return (
@@ -31,7 +32,7 @@ export default function Deployment() {
           <CallCta variant="solid" />
         </div>
       </div>
-      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[440px] md:w-[608px]">
+      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[600px] md:w-[608px]">
         <Image
           src={deploymentImage}
           alt=""

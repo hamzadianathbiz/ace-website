@@ -17,18 +17,20 @@ export default function Capability() {
       className="section-y flex scroll-mt-24 flex-col gap-8 px-4 md:flex-row md:items-center md:gap-16 md:pl-gutter md:pr-2"
     >
       <div className="w-full flex flex-col gap-6 md:w-[449px]">
-        <span className="label">Verticals</span>
+        {/* A heading in the display face rather than the mono eyebrow the
+            other sections lead with. */}
+        <h2 className="display-lg">Verticals</h2>
         <p className="text-base leading-[1.6] text-ace-ink md:text-[18px]">
-          Private equity funds in the lower-mid and mid market, investment
-          banks, M&amp;A boutiques, family offices, and the portfolio companies
-          those funds already own.
+          Private equity funds, investment banks, M&amp;A boutiques, family
+          offices and PE-backed portfolio companies. In the lower-mid and
+          mid-market.
         </p>
         <p className="text-base leading-[1.6] text-ace-ink md:text-[18px]">
-          What they have in common is a firm running on partner memory,
-          spreadsheets and hundred-page documents nobody can query. That
-          fragmentation shows up as decision latency: the gap between a pattern
-          emerging and the firm acting on it. The gap is a tax on returns, and
-          closing it is what we are paid for.
+          A unique opportunity exists today where private capital firms can
+          create asymmetric upside using frontier technology — without frontier
+          level costs. This arbitrage of operational and technological
+          breakthrough paves the way for record-breaking growth, creating new
+          market leaders and setting higher industry standards.
         </p>
         <ul className="flex flex-col">
           {CLIENTS.map((client) => (

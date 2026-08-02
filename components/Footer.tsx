@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import CallCta from '@/components/CallCta'
 import { DISCOVERY_CALL, EMAIL, LINKEDIN, SECTIONS } from '@/lib/links'
 
 type FooterItem = { num: string; label: string; href: string; external?: boolean }
@@ -33,10 +32,6 @@ export default function Footer() {
   return (
     <footer className="on-dark gutter bg-ace-black pb-8 text-white md:pb-10">
       <div className="mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
-        <div className="mb-10 md:mb-14">
-          <CallCta variant="on-film" />
-        </div>
-
         <nav className="flex flex-col gap-10 md:flex-row">
           {COLUMNS.map((col) => (
             <ul key={col.title} className="flex flex-col gap-[0.8rem] pr-[0.8rem] md:w-[340px]">
