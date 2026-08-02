@@ -17,9 +17,10 @@ export default function Capability() {
       className="section-y flex scroll-mt-24 flex-col gap-8 px-4 md:flex-row md:items-center md:gap-16 md:pl-gutter md:pr-2"
     >
       <div className="w-full flex flex-col gap-6 md:w-[449px]">
-        {/* A display heading rather than the mono eyebrow the other sections
-            lead with, but carrying the same red tick they do. */}
-        <h2 className="display-lg marked">Verticals</h2>
+        {/* Eyebrow and heading both, as on the service sections — the red
+            tick rides the eyebrow, so the heading does not repeat it. */}
+        <span className="label">Verticals</span>
+        <h2 className="display-lg">Verticals</h2>
         <p className="text-base leading-[1.6] text-ace-ink md:text-[18px]">
           Private equity funds, investment banks, M&amp;A boutiques, family
           offices and PE-backed portfolio companies. In the lower-mid and

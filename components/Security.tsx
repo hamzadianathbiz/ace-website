@@ -5,6 +5,10 @@ import complianceImage from '@/public/assets/web/compliance.png'
   The badge strip is supplied artwork, sitting below the statement rather
   than beside it: it is a 3:1 letterbox, and in a side column it would have
   come down to about 170px tall with the labels too small to read.
+
+  Its background is transparent, so it sits straight on the page ground with
+  no card or border around it — a box here would be drawn around empty space
+  rather than around the artwork.
 */
 export default function Security() {
   return (
@@ -18,15 +22,12 @@ export default function Security() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-ace-line">
-          <Image
-            src={complianceImage}
-            alt="GDPR ready. CCPA ready. ISO 27001 coming soon. SOC 2 auditing."
-            placeholder="blur"
-            sizes="(max-width: 1128px) 100vw, 1128px"
-            className="h-auto w-full"
-          />
-        </div>
+        <Image
+          src={complianceImage}
+          alt="GDPR ready. CCPA ready. ISO 27001 coming soon. SOC 2 auditing."
+          sizes="(max-width: 1128px) 100vw, 1128px"
+          className="h-auto w-full"
+        />
       </div>
     </section>
   )
