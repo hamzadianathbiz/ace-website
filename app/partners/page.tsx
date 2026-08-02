@@ -31,8 +31,9 @@ export default function Partners() {
           <CallCta label="Join The Waitlist" />
         </div>
       </section>
-      {/* The source is a native 16:9, so cover fills the frame without
-          cropping anything — no letterbox needed. */}
+      {/* A 4:3 source in a 16:9 frame, so it gives up the top and bottom
+          eighth. That takes the upper window panes and the foreground floor
+          and leaves the skyline and the table, which is the picture. */}
       <section className="px-4 pb-4 md:px-6">
         <div className="relative mx-auto aspect-[16/9] w-full max-w-[1128px] overflow-hidden rounded-2xl">
           <Image
