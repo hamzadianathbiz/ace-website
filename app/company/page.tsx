@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
 import Company from '@/components/Company'
-import EditorialTopic from '@/components/EditorialTopic'
+import OurStory from '@/components/OurStory'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
@@ -15,9 +15,7 @@ export default function CompanyPage() {
     <>
       <Header />
       <Company />
-      {/* Same Thesis block the home page carries — rendered on both routes
-          on purpose, not by accident. */}
-      <EditorialTopic />
+      <OurStory />
       <Footer />
     </>
   )
