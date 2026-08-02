@@ -12,7 +12,7 @@ const PARAGRAPHS = [
 
 export default function OurStory() {
   return (
-    <section className="gutter section-y">
+    <section id="our-story" className="gutter section-y scroll-mt-24">
       <div className="flex max-w-[720px] flex-col gap-6">
         <span className="label">Our Story</span>
         <h2 className="display-lg">Our Story</h2>
