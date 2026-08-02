@@ -33,13 +33,17 @@ export default function Advisory() {
         </div>
       </div>
       <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[600px] md:w-[608px]">
+        {/* 16:9 source in a near-square frame, so it crops in from the sides.
+            Pulled right of centre: the Gherkin sits about 78% across and was
+            landing on the crop edge. At 65% the visible band runs roughly
+            28-85%, which keeps St Paul's and brings the Gherkin well in. */}
         <Image
           src={advisoryImage}
           alt=""
           fill
           placeholder="blur"
           sizes="(max-width: 768px) 100vw, 608px"
-          className="object-cover"
+          className="object-cover object-[65%_center]"
         />
       </div>
     </section>
