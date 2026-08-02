@@ -1,0 +1,31 @@
+import Image from 'next/image'
+import aszLogo from '@/public/assets/web/asz-technologies.png'
+
+/*
+  The wordmark is transparent, so it sits straight on the cream with no
+  plate behind it. Rendered at 200px against a 342px source, which leaves
+  enough pixels for a retina screen.
+*/
+export default function FulfillmentPartner() {
+  return (
+    <section id="fulfillment-partner" className="gutter section-y scroll-mt-24">
+      <div className="flex max-w-[720px] flex-col gap-6">
+        <span className="label">Fulfillment Partner</span>
+        <h2 className="display-lg">Fulfillment Partner</h2>
+        <p className="text-base leading-[1.7] text-ace-ink md:text-[18px]">
+          We have partnered with ASZ Technologies who boast a team of 42
+          experienced developers and who have experience working with household
+          names like Patek Philippe, Pfizer and NUS. ACE leverages the technical
+          knowledge and domain expertise of ASZ to deploy enterprise grade
+          services to our clientele.
+        </p>
+        <Image
+          src={aszLogo}
+          alt="ASZ Technologies"
+          sizes="200px"
+          className="mt-2 h-auto w-[180px] md:w-[200px]"
+        />
+      </div>
+    </section>
+  )
+}

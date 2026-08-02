@@ -12,7 +12,9 @@ export default function CaseStudies() {
     <section id="case-studies" className="gutter section-y scroll-mt-24">
       <div className="flex max-w-[720px] flex-col gap-6">
         <span className="label">Case Studies</span>
-        <h2 className="display-lg">Case Studies</h2>
+        {/* h1 rather than h2: with the Company block gone this is the first
+            heading on the route, and the page would otherwise have none. */}
+        <h1 className="display-lg">Case Studies</h1>
         {CASE_STUDIES.map((study) => (
           <div key={study.client} className="flex flex-col gap-2 border-t border-ace-line pt-6">
             <span className="ordinal">{study.client}</span>

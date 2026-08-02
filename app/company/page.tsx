@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Header from '@/components/Header'
-import Company from '@/components/Company'
 import CaseStudies from '@/components/CaseStudies'
+import FulfillmentPartner from '@/components/FulfillmentPartner'
 import OurStory from '@/components/OurStory'
 import Footer from '@/components/Footer'
 
@@ -15,8 +15,8 @@ export default function CompanyPage() {
   return (
     <>
       <Header />
-      <Company />
       <CaseStudies />
+      <FulfillmentPartner />
       <OurStory />
       <Footer />
     </>
