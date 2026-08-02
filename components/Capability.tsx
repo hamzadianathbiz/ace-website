@@ -14,7 +14,7 @@ export default function Capability() {
   return (
     <section
       id="verticals"
-      className="flex scroll-mt-24 flex-col gap-8 px-4 py-0 md:flex-row md:items-center md:pr-2 md:pl-gutter"
+      className="section-y flex scroll-mt-24 flex-col gap-8 px-4 md:flex-row md:items-center md:gap-16 md:pl-gutter md:pr-2"
     >
       <div className="w-full flex flex-col gap-6 md:w-[449px]">
         <span className="label">Verticals</span>
@@ -47,7 +47,7 @@ export default function Capability() {
       </div>
       {/* The floating pill that sat here read as a toggle but did nothing.
           Removed rather than restyled. */}
-      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[760px] md:w-[608px]">
+      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[720px] md:w-[608px]">
         <Image
           src={serveImage}
           alt=""

@@ -160,7 +160,7 @@ export default function Hero() {
     // a wide band, on a tall one it caps at the spec's 643px. Mobile keeps
     // the aspect ratio: the card is already short enough there that the copy
     // fits on its own.
-    <section className="bg-ace-cream pb-20 pt-5 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8">
+    <section className="bg-ace-cream pb-10 pt-5 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8">
       <noscript>
         {/* Without JS the phase never advances, so pin the image into its
             card, drop the lockup that would otherwise sit there forever,

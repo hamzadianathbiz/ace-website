@@ -1,6 +1,7 @@
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
-import Services from '@/components/Services'
+import Advisory from '@/components/Advisory'
+import Deployment from '@/components/Deployment'
 import Capability from '@/components/Capability'
 import Footer from '@/components/Footer'
 
@@ -9,7 +10,8 @@ export default function Home() {
     <>
       <Header />
       <Hero />
-      <Services />
+      <Advisory />
+      <Deployment />
       <Capability />
       <Footer />
     </>
