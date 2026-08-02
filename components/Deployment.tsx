@@ -7,9 +7,9 @@ import CallCta from '@/components/CallCta'
   right. Text still comes first in the DOM — flex-row-reverse handles the
   visual swap, so reading order stays sensible.
 
-  Same box as Advisory's. This source is all but square, so it fills the
-  frame with next to nothing lost; Advisory's is 16:9 and crops in from the
-  sides to suit. Matching boxes matter more than either filling its own.
+  Same box as Advisory's. This source is 4:3, so it gives up a little from
+  each side and the plant stays whole; Advisory's is 16:9 and crops harder.
+  Matching boxes matter more than either filling its own exactly.
 */
 export default function Deployment() {
   return (
