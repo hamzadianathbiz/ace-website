@@ -7,9 +7,9 @@ import CallCta from '@/components/CallCta'
   right. Text still comes first in the DOM — flex-row-reverse handles the
   visual swap, so reading order stays sensible.
 
-  Same box as Advisory's. This source is landscape and that one is portrait,
-  so matching the box means each crops differently — the pair reading as a
-  pair is worth more than either one filling its frame exactly.
+  Same box as Advisory's. Both sources are landscape and the box is close to
+  square, so each is cropped in from the sides — the pair matching is worth
+  more than either one filling its frame exactly.
 */
 export default function Deployment() {
   return (
