@@ -14,7 +14,7 @@ export default function Capability() {
   return (
     <section
       id="verticals"
-      className="section-y flex scroll-mt-24 flex-col gap-8 px-4 md:flex-row md:items-center md:gap-16 md:pl-gutter md:pr-2"
+      className="section-y flex scroll-mt-24 flex-col gap-6 px-4 md:flex-row md:items-center md:gap-16 md:pl-gutter md:pr-2"
     >
       <div className="w-full flex flex-col gap-6 md:w-[449px]">
         {/* Eyebrow and heading both, as on the service sections — the red

@@ -56,6 +56,7 @@ const LOGO_OUT_MS = 1000
 
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
   const [phase, setPhase] = useState<Phase>('cover')
   const [target, setTarget] = useState<DOMRect | null>(null)
   // The hold is counted from when the image is actually on screen, not from
@@ -67,6 +68,16 @@ export default function Hero() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setPhase('settled')
     }
+  }, [])
+
+  /*
+    A cached image can finish decoding before React hydrates, in which case
+    onLoad never fires and the sequence sits waiting on the 3s bail below —
+    which reads as no intro at all, then a late one out of nowhere. On a
+    repeat visit that is every visit, so check the element directly on mount.
+  */
+  useEffect(() => {
+    if (imgRef.current?.complete) setReady(true)
   }, [])
 
   // Never hold the page hostage to an image that is slow or never arrives.
@@ -165,7 +176,7 @@ export default function Hero() {
     // a wide band, on a tall one it caps at the spec's 643px. Mobile keeps
     // the aspect ratio: the card is already short enough there that the copy
     // fits on its own.
-    <section className="bg-ace-cream pb-10 pt-5 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8">
+    <section className="bg-ace-cream pb-8 pt-4 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8 md:pt-5">
       <noscript>
         {/* Without JS the phase never advances, so pin the image into its
             card, drop the lockup that would otherwise sit there forever,
@@ -215,6 +226,7 @@ export default function Hero() {
               at the edge, and priority marks it as the LCP element.
             */}
             <Image
+              ref={imgRef}
               src={heroImage}
               alt=""
               fill
@@ -231,7 +243,7 @@ export default function Hero() {
         </div>
 
         {/* Content block — 810px wide, centred, 32px rhythm. */}
-        <div className="mx-auto mt-12 flex w-full max-w-[810px] flex-none flex-col items-center gap-8 md:mt-8 md:gap-6">
+        <div className="mx-auto mt-8 flex w-full max-w-[810px] flex-none flex-col items-center gap-5 md:mt-8 md:gap-6">
           {/* text-balance evens the line lengths rather than filling each
               line before breaking — on a centred block that is the whole
               difference between a tidy stack and a ragged one. */}

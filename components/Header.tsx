@@ -38,20 +38,27 @@ export default function Header() {
   return (
     <header className="bg-ace-cream">
       {/*
-        Three columns rather than justify-between: the logo and the CTA are
-        different widths, so space-between pushed the nav off centre by half
-        that difference. Equal 1fr rails on either side of an auto-width nav
-        centre it against the bar itself.
+        Two layouts, because the nav only exists at lg and up.
+
+        lg+: three columns. The logo and the CTA are different widths, so
+        space-between pushed the nav off centre by half that difference;
+        equal 1fr rails either side of an auto-width nav centre it properly.
+
+        Below lg the nav is display:none, which takes it out of the grid
+        entirely — the actions then auto-place into the middle column and the
+        burger sits in the centre of the bar. So below lg this is a plain
+        flex row instead: logo left, burger hard right.
       */}
-      <div className="mx-auto grid h-[100px] w-full max-w-[1128px] grid-cols-[1fr_auto_1fr] items-center px-4 md:px-6">
-        {/* justify-self-start: otherwise the link stretches across the whole
-            1fr rail and turns dead space into a click target. */}
+      <div className="mx-auto flex h-[72px] w-full max-w-[1128px] items-center justify-between px-4 md:h-[100px] md:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+        {/* justify-self-start: in the grid the link would otherwise stretch
+            across the whole 1fr rail and turn dead space into a click
+            target. Harmless in the flex row below lg. */}
         <Link
           href="/"
           aria-label="ACE — AI Deployment Co."
           className="flex items-center justify-self-start"
         >
-          <img src="/assets/web/ace-logomark.png" alt="" className="h-10 w-auto md:h-12" />
+          <img src="/assets/web/ace-logomark.png" alt="" className="h-9 w-auto md:h-12" />
         </Link>
 
         <nav className="hidden items-center gap-10 lg:flex">

@@ -13,7 +13,7 @@ import CallCta from '@/components/CallCta'
 */
 export default function Deployment() {
   return (
-    <section className="section-y flex flex-col gap-8 px-4 md:flex-row-reverse md:items-center md:gap-16 md:pl-2 md:pr-gutter">
+    <section className="section-y flex flex-col gap-6 px-4 md:flex-row-reverse md:items-center md:gap-16 md:pl-2 md:pr-gutter">
       <div className="flex w-full flex-col gap-6 md:w-[449px]">
         {/* No eyebrow here — the 02 against Advisory's 01 is what ties the
             two sections together, and a second "Services" would just repeat
