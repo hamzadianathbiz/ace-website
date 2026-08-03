@@ -92,9 +92,12 @@ Worth knowing before you touch it:
 - The hold starts on image **load**, not on mount. Counting from mount spends the full-bleed moment showing the blur placeholder while the file decodes. A 3s bail covers a slow or failed image.
 - `cover` is the server-rendered state, so first paint is already full-bleed with no flash of the settled layout during hydration. The `<noscript>` rule drops the image into its card for anyone without JS, who would otherwise be stuck on a permanent full-screen image.
 - Scroll is locked until the image is home.
-- The whole sequence is skipped under `prefers-reduced-motion`.
+- Under `prefers-reduced-motion`, the spatial sequence is replaced by a clear
+  opacity-only sequence: the lockup fades in, holds, fades out, and then the
+  full-screen still dissolves. The settled hero is rendered underneath, so the
+  image never scales or travels for users who requested less motion.
 
-Timing knobs live in `DESKTOP_TIMING` and `MOBILE_TIMING` at the top of the file.
+Timing knobs live in `DESKTOP_TIMING`, `MOBILE_TIMING` and `REDUCED_TIMING` at the top of the file.
 
 ## Fonts
 

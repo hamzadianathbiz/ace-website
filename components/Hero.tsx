@@ -36,8 +36,10 @@ import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
     without JS, who would otherwise be stuck on a full-screen image.
   - Scroll is locked until the image is home. Scrolling underneath a
     full-screen overlay just desynchronises the two.
-  - The sequence is identical on every device and under Reduce Motion; see
-    the note in the component for why.
+  - The full spatial sequence is identical on every normal-motion device.
+    Reduce Motion gets a short branded dissolve instead of the viewport-to-
+    card travel, so the opening is still present without forcing a large
+    scaling movement on someone who has explicitly asked to avoid it.
 */
 
 /*
@@ -46,6 +48,7 @@ import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
   shrinking — lockup gone, image on its way into the card
 */
 type Phase = 'cover' | 'fading' | 'shrinking' | 'settled'
+type ReducedIntroStage = 'waiting' | 'visible' | 'logo-out' | 'frame-out' | 'done'
 
 /*
   How long the full-bleed frame holds before the lockup starts to leave,
@@ -75,12 +78,22 @@ const MOBILE_TIMING = {
   revealDelays: [360, 600, 840],
 } as const
 
+const REDUCED_TIMING = {
+  start: 80,
+  logoIn: 500,
+  hold: 650,
+  logoOut: 500,
+  frameOut: 650,
+} as const
+
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const [phase, setPhase] = useState<Phase>('cover')
   const [target, setTarget] = useState<DOMRect | null>(null)
   const [isMobile, setIsMobile] = useState<boolean | null>(null)
+  const [reducedIntroStage, setReducedIntroStage] =
+    useState<ReducedIntroStage>('waiting')
   // The hold is counted from when the image is actually on screen, not from
   // mount. Otherwise the full-bleed moment — the whole point of the intro —
   // is spent looking at the blur placeholder while the file decodes.
@@ -101,24 +114,57 @@ export default function Hero() {
   }
 
   /*
-    Reduced Motion settles immediately. The matching CSS rule in globals.css
-    pins the frame into its card before this effect runs, so there is no
-    full-viewport flash or travel while React hydrates.
+    Reduced Motion settles the real page immediately, but keeps a separate
+    full-screen still above it for one short branded beat. That still then
+    dissolves away using opacity only. The large viewport-to-card movement
+    remains exclusive to `no-preference`.
+
+    The matching CSS rule in globals.css pins the real frame into its card
+    before this effect runs and exposes the reduced overlay before hydration,
+    so neither mode flashes the wrong first frame.
   */
 
   // Resolve the timing profile before the image-ready effect can start the
   // hold. Captured once because switching timings mid-intro on rotation or
   // resize would create a visible speed change.
   useEffect(() => {
+    const timers: number[] = []
     const frame = window.requestAnimationFrame(() => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         setReady(true)
         setPhase('settled')
+        if (deepLink.current) {
+          setReducedIntroStage('done')
+          return
+        }
+        const logoOutAt =
+          REDUCED_TIMING.start + REDUCED_TIMING.logoIn + REDUCED_TIMING.hold
+        const frameOutAt = logoOutAt + REDUCED_TIMING.logoOut
+        const doneAt = frameOutAt + REDUCED_TIMING.frameOut
+        timers.push(
+          window.setTimeout(
+            () => setReducedIntroStage('visible'),
+            REDUCED_TIMING.start,
+          ),
+          window.setTimeout(
+            () => setReducedIntroStage('logo-out'),
+            logoOutAt,
+          ),
+          window.setTimeout(
+            () => setReducedIntroStage('frame-out'),
+            frameOutAt,
+          ),
+          window.setTimeout(() => setReducedIntroStage('done'), doneAt),
+        )
         return
       }
+      setReducedIntroStage('done')
       setIsMobile(window.matchMedia('(max-width: 767px)').matches)
     })
-    return () => window.cancelAnimationFrame(frame)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      timers.forEach((timer) => window.clearTimeout(timer))
+    }
   }, [])
 
   const timing = isMobile ? MOBILE_TIMING : DESKTOP_TIMING
@@ -264,8 +310,46 @@ export default function Hero() {
         {/* Without JS the phase never advances, so pin the image into its
             card, drop the lockup that would otherwise sit there forever,
             and let the page behave normally. */}
-        <style>{`.hero-frame{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:1rem!important;z-index:auto!important}.hero-intro-logo{display:none!important}`}</style>
+        <style>{`.hero-frame{position:absolute!important;inset:0!important;width:auto!important;height:auto!important;border-radius:1rem!important;z-index:auto!important}.hero-intro-logo,.hero-reduced-intro{display:none!important}`}</style>
       </noscript>
+
+      {/*
+        Reduced-motion opening. The settled hero is already rendered beneath
+        this still, so the only animated property is opacity. It stays in the
+        server tree for the first paint, then is removed after the dissolve.
+        In normal motion CSS hides it and the mount effect removes it at once.
+      */}
+      {reducedIntroStage !== 'done' && (
+        <div
+          aria-hidden="true"
+          data-stage={reducedIntroStage}
+          className="hero-reduced-intro pointer-events-none fixed inset-0 z-[70] hidden items-center justify-center overflow-hidden"
+          style={{ opacity: reducedIntroStage === 'frame-out' ? 0 : 1 }}
+        >
+          <Image
+            src={heroImage}
+            alt=""
+            fill
+            placeholder="blur"
+            sizes="100vw"
+            className="object-cover object-[center_25%]"
+          />
+          <div
+            className="hero-reduced-lockup relative z-10 flex w-full flex-col items-center gap-6 px-6"
+            style={{ opacity: reducedIntroStage === 'visible' ? 1 : 0 }}
+          >
+            <Image
+              src={aceLogoWhite}
+              alt=""
+              sizes="(max-width: 645px) 62vw, 400px"
+              className="w-[min(400px,62vw)] max-w-full"
+            />
+            <p className="display-lg w-full max-w-[620px] text-center font-bold text-white">
+              Accelerating Company Excellence
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Sits above the full-bleed frame. Mounted for the two beats it is
           part of and dropped the moment the shrink begins, by which point

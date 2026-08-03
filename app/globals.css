@@ -222,9 +222,21 @@
 [data-deep-link] .hero-intro-logo {
   display: none !important;
 }
+[data-deep-link] .hero-reduced-intro {
+  display: none !important;
+}
 
-/* Reduced motion gets the same settled first paint as a deep link. The
-   client effect then advances the state without any full-screen travel. */
+/* The reduced-motion opening exists in the server tree so the first frame
+   can be branded before hydration. Normal-motion browsers never display it. */
+.hero-reduced-intro {
+  display: none;
+}
+
+/* Reduced motion gets a settled real hero plus a short, stationary branded
+   still above it. The lockup fades in, holds, fades out, and only then does
+   the still dissolve. The large image never scales or travels. These two
+   opacity transitions intentionally override the global 0.01ms rule for this
+   non-spatial accessibility alternative. */
 @media (prefers-reduced-motion: reduce) {
   .hero-frame {
     position: absolute !important;
@@ -236,5 +248,16 @@
   }
   .hero-intro-logo {
     display: none !important;
+  }
+  .hero-reduced-intro {
+    display: flex !important;
+    transition-property: opacity !important;
+    transition-duration: 650ms !important;
+    transition-timing-function: ease-in-out !important;
+  }
+  .hero-reduced-lockup {
+    transition-property: opacity !important;
+    transition-duration: 500ms !important;
+    transition-timing-function: ease-in-out !important;
   }
 }

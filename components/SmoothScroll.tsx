@@ -17,7 +17,8 @@ import { registerScroller } from '@/lib/scroll-lock'
   Under prefers-reduced-motion nothing is instantiated at all, so the
   browser's own scrolling is untouched. Note that a phone with Reduce Motion
   switched on in accessibility settings will therefore scroll natively, by
-  design — the same switch also skips the hero intro.
+  design. The hero separately provides a short, opacity-only branded opening
+  instead of its full spatial sequence.
 
   anchors: true hands in-page links to Lenis, so the nav's #services and
   #verticals ease across instead of jumping while Lenis fights them.
