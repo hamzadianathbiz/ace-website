@@ -1,14 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import footerImage from '@/public/assets/web/footer-interior.png'
-import { DISCOVERY_CALL, EMAIL, LINKEDIN, SECTIONS } from '@/lib/links'
+import { DISCOVERY_CALL, EMAIL, LEGAL, LINKEDIN, SECTIONS } from '@/lib/links'
 
 type FooterItem = { num: string; label: string; href: string; external?: boolean }
 type FooterColumn = { title: string; items: FooterItem[] }
 
 /*
-  Two columns, not four. The retired columns pointed at /careers and
-  /legal/* pages that do not exist — a 404 is worse than an absent link.
+  Three focused columns. Legal stays deliberately small: only the two
+  documents visitors need, rather than a generic footer link farm.
 */
 const COLUMNS: FooterColumn[] = [
   {
@@ -26,6 +26,13 @@ const COLUMNS: FooterColumn[] = [
       { num: '2.1', label: 'Book a Discovery Call', href: DISCOVERY_CALL },
       { num: '2.2', label: EMAIL, href: `mailto:${EMAIL}` },
       { num: '2.3', label: 'LinkedIn', href: LINKEDIN, external: true },
+    ],
+  },
+  {
+    title: 'Legal',
+    items: [
+      { num: '3.1', label: 'Terms & Conditions', href: LEGAL.terms },
+      { num: '3.2', label: 'Privacy Policy', href: LEGAL.privacy },
     ],
   },
 ]
@@ -51,9 +58,9 @@ export default function Footer() {
       <div className="absolute inset-0 bg-ace-black/85 md:bg-ace-black/70" />
 
       <div className="relative mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
-        <nav className="flex flex-col gap-10 md:flex-row">
+        <nav className="flex flex-col gap-10 lg:grid lg:grid-cols-3 lg:gap-8">
           {COLUMNS.map((col) => (
-            <ul key={col.title} className="flex flex-col gap-[0.8rem] pr-[0.8rem] md:w-[340px]">
+            <ul key={col.title} className="flex flex-col gap-[0.8rem] pr-[0.8rem] lg:w-auto">
               <li className="mb-2 text-ace-gray3">{col.title}</li>
               {col.items.map((item) => (
                 <li key={item.num}>

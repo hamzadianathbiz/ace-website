@@ -15,6 +15,11 @@ export const PARTNER_WAITLIST = 'https://tally.so/r/Xx75E4'
 export const EMAIL = 'contact@acedeployed.com'
 export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
 
+export const LEGAL = {
+  terms: '/legal/terms',
+  privacy: '/legal/privacy',
+} as const
+
 /*
   The marketing story is one page, so most of these are in-page anchors and
   the ids live on the sections themselves — keep the two in step. Company
