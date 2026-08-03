@@ -82,6 +82,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`}>
+      <head>
+        {/*
+          Arriving at a section — /#services, /#verticals — is not arriving
+          at the site, so the intro does not play. On a client-side
+          navigation Hero settles itself on mount and this never matters.
+          It matters on a hard load of a deep link: the server cannot see a
+          hash, so its HTML is the full-bleed opening, and without this the
+          page would paint full-screen and then snap into the card.
+
+          Set before first paint, read and cleared by Hero on mount — see
+          the note there for why it cannot be left on the element.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if(location.hash)document.documentElement.dataset.deepLink="1"`,
+          }}
+        />
+      </head>
       <body className="bg-ace-cream font-sans text-ace-black">
         <SmoothScroll />
         {children}

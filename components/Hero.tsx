@@ -20,7 +20,10 @@ import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
   rises in as the image is on its way down.
 
   This component is only ever rendered on the home page, which is what keeps
-  the intro off /company and /partners.
+  the intro off /company and /partners. It is also skipped when the URL
+  carries a hash, so the section anchors in the nav scroll straight to their
+  section — see the deep-link effect below. The logo's bare `/` is what
+  plays it.
 
   How it is wired:
   - The card div is always in flow and always reserves its box, so there is
@@ -66,6 +69,20 @@ export default function Hero() {
   const [ready, setReady] = useState(false)
 
   /*
+    Whether this visit is a deep link into a section. Read once at first
+    render rather than inside an effect, because the scroll lock below has
+    to know before it runs — it fires on the same mount pass and would
+    otherwise hold the page still through the browser's jump to the anchor.
+
+    A ref and not state: it never renders, so reading `window` here cannot
+    put the client tree out of step with the server's.
+  */
+  const deepLink = useRef<boolean | null>(null)
+  if (deepLink.current === null) {
+    deepLink.current = typeof window !== 'undefined' && Boolean(window.location.hash)
+  }
+
+  /*
     The intro plays the same everywhere, including under Reduce Motion.
 
     It has been through both extremes: skipped entirely on that setting,
@@ -78,6 +95,28 @@ export default function Hero() {
     parallax, loop or bounce, which is the mild end of what the setting
     exists to catch. globals.css still stops everything else on the page.
   */
+
+  /*
+    The intro is for arriving at the site, not for arriving at a section.
+    Every in-page anchor is absolute — /#services, /#verticals — so clicking
+    Services from /company lands here and would otherwise play the whole
+    opening before scrolling down to the section that was asked for. A hash
+    means the visitor asked for somewhere specific: settle immediately.
+
+    The logo goes to bare `/`, so it keeps the intro, which is the one route
+    back to it.
+
+    The attribute is cleared rather than read and left: it is set once, on
+    the initial document, and a later client-side navigation to `/` would
+    otherwise still carry it and suppress an intro that should play.
+
+    Runs before the effects below so `phase` has left 'cover' by the time
+    the hold is considered.
+  */
+  useEffect(() => {
+    delete document.documentElement.dataset.deepLink
+    if (deepLink.current) setPhase('settled')
+  }, [])
 
   /*
     A cached image can finish decoding before React hydrates, in which case
@@ -128,7 +167,9 @@ export default function Hero() {
   }, [phase])
 
   useEffect(() => {
-    if (phase === 'settled') return
+    // deepLink: nothing is playing, and locking even for the frame before
+    // the phase settles can swallow the scroll to the requested section.
+    if (phase === 'settled' || deepLink.current) return
     const previous = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     // Smooth scrolling drives the page itself, so the overflow lock alone

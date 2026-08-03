@@ -172,3 +172,30 @@
     @apply mt-3 text-[13px] text-ace-muted leading-[1.5] w-full max-w-[348px];
   }
 }
+
+/*
+  Hard load of a deep link — /#services, /#verticals. A hash never reaches
+  the server, so its HTML is the hero's full-bleed opening; this pins the
+  image into its card and drops the lockup before the first paint, and Hero
+  clears the attribute once it has mounted. Without it the page paints
+  full-screen and then snaps into the card.
+
+  Same declarations as the <noscript> rule in Hero, for the same reason: the
+  phase has not advanced, so the frame has to be placed by CSS. !important
+  because .hero-frame's own box comes from utilities.
+
+  Deliberately outside @layer — Tailwind tree-shakes unused rules out of the
+  component layer, and an attribute selector is not a candidate it detects,
+  so this was silently dropped from the build when it lived there.
+*/
+[data-deep-link] .hero-frame {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 1rem !important;
+  z-index: auto !important;
+}
+[data-deep-link] .hero-intro-logo {
+  display: none !important;
+}

@@ -4,6 +4,7 @@ import partnersImage from '@/public/assets/web/partners.png'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CallCta from '@/components/CallCta'
+import { PARTNER_WAITLIST } from '@/lib/links'
 
 export const metadata: Metadata = {
   title: 'Partner Program — ACE',
@@ -28,8 +29,7 @@ export default function Partners() {
             collaborating on deployment opportunities with veterans of the
             industry.
           </p>
-          {/* No destination yet — the waitlist has nowhere to point. */}
-          <CallCta label="Join The Waitlist" href={null} />
+          <CallCta label="Join The Waitlist" href={PARTNER_WAITLIST} />
         </div>
       </section>
       {/* A 4:3 source. On a phone the frame matches it, so nothing is lost

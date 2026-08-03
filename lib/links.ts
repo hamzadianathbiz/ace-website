@@ -7,6 +7,11 @@
 // Changing this one line changes every discovery-call button on the site.
 export const DISCOVERY_CALL = 'https://cal.com/acedeployed/ace-discovery'
 
+// Tally form. Registers interest in the Partner Program — the terms it
+// quotes mirror projects/partner-program/ace-partner-program.md v1.0 in the
+// ACE vault, so change the form when that document changes.
+export const PARTNER_WAITLIST = 'https://tally.so/r/Xx75E4'
+
 export const EMAIL = 'contact@acedeployed.com'
 export const LINKEDIN = 'https://www.linkedin.com/in/hamzavc'
 
