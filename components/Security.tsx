@@ -32,7 +32,7 @@ export default function Security() {
           src={complianceStacked}
           alt="GDPR ready. CCPA ready. ISO 27001 coming soon. SOC 2 auditing."
           sizes="100vw"
-          className="mx-auto h-auto w-full max-w-[380px] md:hidden"
+          className="mx-auto h-auto w-[75.24%] max-w-[380px] md:hidden"
         />
 
         <Image

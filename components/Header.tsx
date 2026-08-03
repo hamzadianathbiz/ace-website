@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { DISCOVERY_CALL, SECTIONS } from '@/lib/links'
+import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
 
 type NavItem = { label: string; href: string; children?: NavItem[] }
 
@@ -37,8 +38,45 @@ export default function Header() {
   // Which item's children are showing in the mobile menu. One at a time.
   const [openSection, setOpenSection] = useState<string | null>(null)
 
+  /*
+    The menu is a full-screen surface on a phone, so the document beneath it
+    should not keep moving. Lock both native scrolling and Lenis, and let
+    Escape dismiss the menu for hardware-keyboard users.
+  */
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const scrollY = window.scrollY
+    const previousBodyStyles = {
+      overflow: document.body.style.overflow,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+    }
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+    lockScroll()
+    window.addEventListener('keydown', closeOnEscape)
+
+    return () => {
+      document.body.style.overflow = previousBodyStyles.overflow
+      document.body.style.position = previousBodyStyles.position
+      document.body.style.top = previousBodyStyles.top
+      document.body.style.width = previousBodyStyles.width
+      window.scrollTo(0, scrollY)
+      unlockScroll()
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [menuOpen])
+
   return (
-    <header className="bg-ace-cream">
+    <header className="sticky top-0 z-40 bg-ace-cream lg:static">
       {/*
         Two layouts, because the nav only exists at lg and up.
 
@@ -58,7 +96,7 @@ export default function Header() {
         <Link
           href="/"
           aria-label="ACE — AI Deployment Co."
-          className="flex items-center justify-self-start"
+          className="flex min-h-11 min-w-11 items-center justify-self-start"
         >
           <img src="/assets/web/ace-logomark.png" alt="" className="h-9 w-auto md:h-12" />
         </Link>
@@ -108,14 +146,14 @@ export default function Header() {
         <div className="flex items-center justify-end gap-4">
           <Link
             href={DISCOVERY_CALL}
-            className="hidden rounded-xl border border-black/[0.08] bg-[#959595]/10 px-6 py-3 text-[16px] text-black transition-colors duration-200 hover:bg-[#959595]/20 md:inline-flex"
+            className="hidden rounded-xl border border-black/[0.08] bg-[#959595]/10 px-6 py-3 text-[16px] text-black transition-colors duration-200 hover:bg-[#959595]/20 active:scale-[.98] md:inline-flex"
           >
             Book a Discovery Call
           </Link>
           <button
             type="button"
             onClick={() => setMenuOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 text-black lg:hidden"
+            className="flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-black/10 text-black transition-transform duration-200 active:scale-95 lg:hidden"
             aria-label="Open menu"
           >
             <Menu className="h-4 w-4" />
@@ -124,7 +162,7 @@ export default function Header() {
       </div>
 
       <div
-        className="fixed inset-0 z-50 flex flex-col justify-between bg-ace-cream px-6 py-8 transition-all duration-500 ease-in-out lg:hidden"
+        className="fixed inset-0 z-50 flex h-[100dvh] flex-col justify-between overscroll-contain bg-ace-cream px-6 py-8 transition-all duration-500 ease-in-out lg:hidden"
         style={{
           transform: menuOpen ? 'scaleY(1)' : 'scaleY(0)',
           transformOrigin: 'top',
@@ -136,7 +174,7 @@ export default function Header() {
           <button
             type="button"
             onClick={() => setMenuOpen(false)}
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 text-black"
+            className="flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-black/10 text-black transition-transform duration-200 active:scale-95"
             aria-label="Close menu"
           >
             <X className="h-4 w-4" />
@@ -160,7 +198,7 @@ export default function Header() {
                 <Link
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className="text-[28px] text-black/70 transition-colors duration-300 hover:text-black"
+                  className="flex min-h-11 touch-manipulation items-center text-[28px] text-black/70 transition-colors duration-300 hover:text-black"
                 >
                   {item.label}
                 </Link>
@@ -170,7 +208,7 @@ export default function Header() {
                     onClick={() => setOpenSection(openSection === item.label ? null : item.label)}
                     aria-expanded={openSection === item.label}
                     aria-label={`${openSection === item.label ? 'Hide' : 'Show'} ${item.label} sections`}
-                    className="flex h-10 w-10 flex-none items-center justify-center text-black/40 transition-colors duration-200 hover:text-black"
+                    className="flex h-11 w-11 flex-none touch-manipulation items-center justify-center text-black/40 transition-colors duration-200 hover:text-black active:scale-95"
                   >
                     <ChevronDown
                       aria-hidden
@@ -188,7 +226,7 @@ export default function Header() {
                       key={child.label}
                       href={child.href}
                       onClick={() => setMenuOpen(false)}
-                      className="text-[18px] text-black/50 transition-colors duration-200 hover:text-black"
+                      className="flex min-h-11 touch-manipulation items-center text-[18px] text-black/50 transition-colors duration-200 hover:text-black"
                     >
                       {child.label}
                     </Link>
@@ -202,7 +240,7 @@ export default function Header() {
         <Link
           href={DISCOVERY_CALL}
           onClick={() => setMenuOpen(false)}
-          className="flex w-full items-center justify-center rounded-xl bg-black py-4 text-[16px] font-medium text-white"
+          className="flex min-h-14 w-full touch-manipulation items-center justify-center rounded-xl bg-black py-4 text-[16px] font-medium text-white transition-transform duration-200 active:scale-[.98]"
         >
           Book a Discovery Call
         </Link>

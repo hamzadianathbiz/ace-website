@@ -49,20 +49,37 @@ type Phase = 'cover' | 'fading' | 'shrinking' | 'settled'
 /*
   How long the full-bleed frame holds before the lockup starts to leave,
   counted from the moment the image is on screen. The lockup's fade-in runs
-  inside this window, so the still moment is HOLD_MS minus LOGO_IN_MS.
+  inside this window, so the still moment is hold minus logoIn.
 */
-const HOLD_MS = 1300
-/** The shrink itself. Long on purpose — this is the calm part. */
-const SHRINK_MS = 1300
-/** The lockup's own fade. The way out is its own beat, so it can be slow. */
-const LOGO_IN_MS = 700
-const LOGO_OUT_MS = 1000
+const DESKTOP_TIMING = {
+  hold: 1300,
+  shrink: 1300,
+  logoIn: 700,
+  logoOut: 1000,
+  reveal: 900,
+  revealDelays: [260, 440, 620],
+} as const
+
+/*
+  A phone has farther to travel perceptually: portrait full-screen to a
+  short 4:3 card. Give each beat more room and stagger the copy more gently,
+  while preserving the desktop sequence and its exact timings above.
+*/
+const MOBILE_TIMING = {
+  hold: 1550,
+  shrink: 1850,
+  logoIn: 850,
+  logoOut: 1200,
+  reveal: 1150,
+  revealDelays: [360, 600, 840],
+} as const
 
 export default function Hero() {
   const cardRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const [phase, setPhase] = useState<Phase>('cover')
   const [target, setTarget] = useState<DOMRect | null>(null)
+  const [isMobile, setIsMobile] = useState<boolean | null>(null)
   // The hold is counted from when the image is actually on screen, not from
   // mount. Otherwise the full-bleed moment — the whole point of the intro —
   // is spent looking at the blur placeholder while the file decodes.
@@ -83,18 +100,28 @@ export default function Hero() {
   }
 
   /*
-    The intro plays the same everywhere, including under Reduce Motion.
+    The intro keeps the same four-beat choreography everywhere, including
+    under Reduce Motion. Mobile uses a longer version of those same beats so
+    the large portrait-to-card move reads as deliberate rather than abrupt.
 
     It has been through both extremes: skipped entirely on that setting,
     which meant a phone with the switch on never saw it; then played with
     the travel removed, which is what "starts well but abruptly disappears"
     was — the frame arriving in its card with no transition to watch.
 
-    Hamza's call is that the sequence is the same on a phone as on a desktop.
-    It is one 1.3s ease on first paint, opacity and a settling frame, with no
-    parallax, loop or bounce, which is the mild end of what the setting
-    exists to catch. globals.css still stops everything else on the page.
+    It is opacity and a single settling frame, with no parallax, loop or
+    bounce, which is the mild end of what the setting exists to catch.
+    globals.css still stops everything else on the page.
   */
+
+  // Resolve the timing profile before the image-ready effect can start the
+  // hold. Captured once because switching timings mid-intro on rotation or
+  // resize would create a visible speed change.
+  useEffect(() => {
+    setIsMobile(window.matchMedia('(max-width: 767px)').matches)
+  }, [])
+
+  const timing = isMobile ? MOBILE_TIMING : DESKTOP_TIMING
 
   /*
     The intro is for arriving at the site, not for arriving at a section.
@@ -136,10 +163,10 @@ export default function Hero() {
 
   // Beat one: hold the full-bleed frame, then start the lockup out.
   useEffect(() => {
-    if (!ready || phase !== 'cover') return
-    const hold = window.setTimeout(() => setPhase('fading'), HOLD_MS)
+    if (!ready || isMobile === null || phase !== 'cover') return
+    const hold = window.setTimeout(() => setPhase('fading'), timing.hold)
     return () => window.clearTimeout(hold)
-  }, [ready, phase])
+  }, [ready, isMobile, phase, timing.hold])
 
   // Beat two: once the lockup has gone, and not before, move the image.
   useEffect(() => {
@@ -153,18 +180,18 @@ export default function Hero() {
       // a stale rect would land the image slightly off its own box.
       setTarget(card.getBoundingClientRect())
       setPhase('shrinking')
-    }, LOGO_OUT_MS)
+    }, timing.logoOut)
 
     return () => window.clearTimeout(gone)
-  }, [phase])
+  }, [phase, timing.logoOut])
 
   // Hand the image back to the card once it has arrived, so it tracks the
   // card on scroll and resize instead of staying pinned to the viewport.
   useEffect(() => {
     if (phase !== 'shrinking') return
-    const done = window.setTimeout(() => setPhase('settled'), SHRINK_MS)
+    const done = window.setTimeout(() => setPhase('settled'), timing.shrink)
     return () => window.clearTimeout(done)
-  }, [phase])
+  }, [phase, timing.shrink])
 
   useEffect(() => {
     // deepLink: nothing is playing, and locking even for the frame before
@@ -196,9 +223,9 @@ export default function Hero() {
         top: target ? target.top : 0,
         left: target ? target.left : 0,
         width: target ? target.width : '100vw',
-        height: target ? target.height : '100vh',
+        height: target ? target.height : '100dvh',
         borderRadius: target ? '1rem' : 0,
-        transition: `top ${SHRINK_MS}ms, left ${SHRINK_MS}ms, width ${SHRINK_MS}ms, height ${SHRINK_MS}ms, border-radius ${SHRINK_MS}ms`,
+        transition: `top ${timing.shrink}ms, left ${timing.shrink}ms, width ${timing.shrink}ms, height ${timing.shrink}ms, border-radius ${timing.shrink}ms`,
         transitionTimingFunction: 'cubic-bezier(0.22, 1, 0.36, 1)',
         // These four are layout properties, so each frame of the shrink is a
         // reflow. Cheap enough on a desktop, tighter on a phone — the hint
@@ -206,7 +233,7 @@ export default function Hero() {
         willChange: 'top, left, width, height',
       }
 
-  const rise = `transition-[opacity,transform] duration-[900ms] ease-calm ${
+  const rise = `transition-[opacity,transform] ease-calm ${
     revealed ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
   }`
 
@@ -219,7 +246,7 @@ export default function Hero() {
   const introVisible = phase === 'cover' && ready
   const introStyle: React.CSSProperties = {
     opacity: introVisible ? 1 : 0,
-    transition: `opacity ${introVisible ? LOGO_IN_MS : LOGO_OUT_MS}ms ease-in-out`,
+    transition: `opacity ${introVisible ? timing.logoIn : timing.logoOut}ms ease-in-out`,
   }
 
   return (
@@ -230,7 +257,7 @@ export default function Hero() {
     // a wide band, on a tall one it caps at the spec's 643px. Mobile keeps
     // the aspect ratio: the card is already short enough there that the copy
     // fits on its own.
-    <section className="bg-ace-cream pb-8 pt-4 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8 md:pt-5">
+    <section className="hero-section bg-ace-cream pb-8 pt-4 md:flex md:h-[calc(100svh-100px)] md:min-h-[620px] md:flex-col md:pb-8 md:pt-5">
       <noscript>
         {/* Without JS the phase never advances, so pin the image into its
             card, drop the lockup that would otherwise sit there forever,
@@ -270,9 +297,13 @@ export default function Hero() {
             From md up the height comes from the flex column instead. */}
         <div
           ref={cardRef}
-          className="relative aspect-[4/3] w-full md:aspect-auto md:max-h-[643px] md:min-h-[260px] md:flex-1"
+          className="hero-card-shell relative aspect-[4/3] w-full md:aspect-auto md:max-h-[643px] md:min-h-[260px] md:flex-1"
         >
-          <div className="hero-frame absolute inset-0 overflow-hidden rounded-2xl" style={frameStyle}>
+          <div
+            data-motion-ok
+            className="hero-frame absolute inset-0 overflow-hidden rounded-2xl"
+            style={frameStyle}
+          >
             {/*
               Statically imported rather than referenced by path: that is
               what lets Next generate the blur placeholder at build time, so
@@ -298,27 +329,42 @@ export default function Hero() {
         </div>
 
         {/* Content block — 810px wide, centred, 32px rhythm. */}
-        <div className="mx-auto mt-8 flex w-full max-w-[810px] flex-none flex-col items-center gap-5 md:mt-8 md:gap-6">
+        <div className="hero-copy mx-auto mt-8 flex w-full max-w-[810px] flex-none flex-col items-center gap-5 md:mt-8 md:gap-6">
           {/* text-balance evens the line lengths rather than filling each
               line before breaking — on a centred block that is the whole
               difference between a tidy stack and a ragged one. */}
           <h1
-            className={`display-xl text-balance text-center text-black ${rise}`}
-            style={{ transitionDelay: '260ms' }}
+            data-motion-ok
+            className={`hero-heading display-xl text-balance text-center text-black ${rise}`}
+            style={{
+              transitionDuration: `${timing.reveal}ms`,
+              transitionDelay: `${timing.revealDelays[0]}ms`,
+            }}
           >
             AI For The Private Capital Industry
           </h1>
 
           <p
-            className={`mx-auto max-w-[680px] text-balance text-center text-[16px] leading-[1.7] tracking-[-0.017em] text-[#1C1A1A]/70 md:text-[18px] ${rise}`}
-            style={{ transitionDelay: '440ms' }}
+            data-motion-ok
+            className={`hero-subhead mx-auto max-w-[680px] text-balance text-center text-[16px] leading-[1.7] tracking-[-0.017em] text-[#1C1A1A]/70 md:text-[18px] ${rise}`}
+            style={{
+              transitionDuration: `${timing.reveal}ms`,
+              transitionDelay: `${timing.revealDelays[1]}ms`,
+            }}
           >
             AI Advisory &amp; Deployment For Private Equity Funds, Investment
             Banks, M&amp;A Boutiques, Family Offices, and PE-Backed Portfolio
             Companies.
           </p>
 
-          <div className={rise} style={{ transitionDelay: '620ms' }}>
+          <div
+            data-motion-ok
+            className={rise}
+            style={{
+              transitionDuration: `${timing.reveal}ms`,
+              transitionDelay: `${timing.revealDelays[2]}ms`,
+            }}
+          >
             <CallCta />
           </div>
         </div>

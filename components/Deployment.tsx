@@ -32,7 +32,7 @@ export default function Deployment() {
           <CallCta variant="solid" />
         </div>
       </div>
-      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[600px] md:w-[608px]">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl md:aspect-auto md:h-[600px] md:w-[608px]">
         <Image
           src={deploymentImage}
           alt=""

@@ -37,9 +37,8 @@ export default function Footer() {
         The source is mostly unlit on the left with the window and sofa off
         to the right, which is why it works behind a footer: the text sits
         over the dark half and the picture reads in the space beside it.
-        Anchored right so that stays true as the viewport narrows, and
-        carrying a tint because the lit corner is bright enough to compete
-        with the copy that crosses it.
+        The mobile crop is shifted toward that visual subject while desktop
+        keeps its existing right anchor.
       */}
       <Image
         src={footerImage}
@@ -47,18 +46,8 @@ export default function Footer() {
         fill
         placeholder="blur"
         sizes="100vw"
-        className="object-cover object-left md:object-right"
+        className="object-cover object-[88%_center] md:object-right"
       />
-      {/*
-        Anchored left on a phone and right from md up. A narrow frame on
-        object-right shows only the far right of the source — the lit window
-        and the sofa — which is the one part the footer copy cannot sit on
-        top of. The left of the frame is the unlit wall, which is what the
-        desktop layout puts the text over anyway.
-
-        The tint runs deeper on mobile for the same reason: there is far less
-        dark ground to hide in at that width.
-      */}
       <div className="absolute inset-0 bg-ace-black/85 md:bg-ace-black/70" />
 
       <div className="relative mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
@@ -72,7 +61,7 @@ export default function Footer() {
                     href={item.href}
                     target={item.external ? '_blank' : undefined}
                     rel={item.external ? 'noopener' : undefined}
-                    className="flex transition-opacity duration-200 hover:opacity-70"
+                    className="flex min-h-11 touch-manipulation items-center transition-opacity duration-200 hover:opacity-70 md:min-h-0 md:items-start"
                   >
                     {/* Display face like every other number on the site. Sized
                         to the footer's own scale rather than the sections' —

@@ -32,7 +32,7 @@ export default function Advisory() {
           <CallCta variant="solid" />
         </div>
       </div>
-      <div className="relative h-[300px] w-full overflow-hidden rounded-2xl md:h-[600px] md:w-[608px]">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl md:aspect-auto md:h-[600px] md:w-[608px]">
         {/* 16:9 source in a near-square frame, so it crops in from the sides.
             Pulled right of centre: the Gherkin sits about 78% across and was
             landing on the crop edge. At 65% the visible band runs roughly

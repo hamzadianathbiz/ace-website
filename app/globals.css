@@ -67,7 +67,7 @@
   */
   .pill,
   .pill.solid {
-    @apply inline-flex items-center gap-2 rounded-xl border-[1.5px] border-black/10 bg-ace-black px-[19px] py-[10px] text-[15px] font-medium text-white cursor-pointer transition-colors duration-200;
+    @apply inline-flex min-h-11 touch-manipulation items-center gap-2 rounded-xl border-[1.5px] border-black/10 bg-ace-black px-[19px] py-[10px] text-[15px] font-medium text-white cursor-pointer transition-[color,background-color,transform] duration-200 md:min-h-0;
     box-shadow: 0 11px 11px rgba(0, 0, 0, 0.09), 0 3px 6px rgba(0, 0, 0, 0.1);
   }
   .pill:hover,
@@ -76,7 +76,7 @@
   }
   .pill:active,
   .pill.solid:active {
-    @apply bg-ace-red-dark;
+    @apply scale-[.98] bg-ace-red-dark;
   }
   .pill.on-film {
     @apply border-black/10 bg-white text-ace-black;
@@ -170,6 +170,33 @@
   }
   .acc-item p {
     @apply mt-3 text-[13px] text-ace-muted leading-[1.5] w-full max-w-[348px];
+  }
+}
+
+/*
+  Short phones need the same hierarchy in less vertical room. The desktop
+  composition is untouched; this only tightens the settled hero below 480px
+  when the available viewport is 700px or shorter. A wider image crop and a
+  slightly denser copy rhythm keep the primary CTA inside the first screen.
+*/
+@media (max-width: 479px) and (max-height: 700px) {
+  .hero-section {
+    padding-bottom: 2rem;
+  }
+  .hero-card-shell {
+    aspect-ratio: 16 / 10;
+  }
+  .hero-copy {
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+  .hero-heading {
+    font-size: 2.125rem;
+    line-height: 1.12;
+  }
+  .hero-subhead {
+    font-size: 0.9375rem;
+    line-height: 1.55;
   }
 }
 
