@@ -1,4 +1,5 @@
 import CallCta from '@/components/CallCta'
+import { PARTNER_WAITLIST } from '@/lib/links'
 
 /*
   Terms mirror projects/partner-program/ace-partner-program.md v1.0 in the
@@ -44,7 +45,11 @@ export default function PartnerProgram() {
           <p className="font-mono text-[11px] uppercase tracking-[.08em] text-white/50 md:text-[12px]">
             Capped at roughly ten partners. Founding cohort forming.
           </p>
-          <CallCta variant="on-film" label="Become a Partner" />
+          {/* Same label and destination as the CTA in the page lead. This
+              card is not currently rendered, but it inherited CallCta's
+              default href, so re-enabling it would have sent partners to
+              the discovery call under a stale label. */}
+          <CallCta variant="on-film" label="Join The Waitlist" href={PARTNER_WAITLIST} />
         </div>
       </div>
     </section>
