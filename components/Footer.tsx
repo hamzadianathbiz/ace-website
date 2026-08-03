@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import footerImage from '@/public/assets/web/footer-interior.png'
+import aceLogoWhite from '@/public/assets/web/ace-logo-white.png'
 import { DISCOVERY_CALL, EMAIL, LEGAL, LINKEDIN, SECTIONS } from '@/lib/links'
 
 type FooterItem = { num: string; label: string; href: string; external?: boolean }
@@ -58,7 +59,7 @@ export default function Footer() {
       <div className="absolute inset-0 bg-ace-black/85 md:bg-ace-black/70" />
 
       <div className="relative mx-auto max-w-[1440px] pt-11 font-mono text-[11px] uppercase tracking-[0.01em] leading-[1.3] md:pt-14 md:text-[12px]">
-        <nav className="flex flex-col gap-10 lg:grid lg:grid-cols-3 lg:gap-8">
+        <nav aria-label="Footer" className="flex flex-col gap-10 lg:grid lg:grid-cols-3 lg:gap-8">
           {COLUMNS.map((col) => (
             <ul key={col.title} className="flex flex-col gap-[0.8rem] pr-[0.8rem] lg:w-auto">
               <li className="mb-2 text-ace-gray3">{col.title}</li>
@@ -88,9 +89,10 @@ export default function Footer() {
             some of the sections above it. */}
         <div className="mt-12 flex flex-col gap-6 md:mt-16 md:items-start md:justify-between">
           <div className="w-2/5">
-            <img
-              src="/assets/web/ace-logo-white.png"
+            <Image
+              src={aceLogoWhite}
               alt="ACE"
+              sizes="(max-width: 767px) 150px, 200px"
               className="w-[150px] h-auto md:w-[200px]"
             />
           </div>

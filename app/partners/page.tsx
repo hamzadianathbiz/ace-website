@@ -7,15 +7,33 @@ import CallCta from '@/components/CallCta'
 import { PARTNER_WAITLIST } from '@/lib/links'
 
 export const metadata: Metadata = {
-  title: 'Partner Program — ACE',
+  title: 'Partner Program',
   description:
     'Introduce ACE to firms in your network and earn from every client you originate, for the life of that client.',
+  alternates: { canonical: '/partners' },
+  openGraph: {
+    title: 'Partner Program — ACE',
+    description:
+      'Introduce ACE to firms in your network and earn from every client you originate, for the life of that client.',
+    url: '/partners',
+    siteName: 'ACE — AI Deployment Co.',
+    type: 'website',
+    images: ['/assets/web/hero-cityscape-poster.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Partner Program — ACE',
+    description:
+      'Introduce ACE to firms in your network and earn from every client you originate, for the life of that client.',
+    images: ['/assets/web/hero-cityscape-poster.jpg'],
+  },
 }
 
 export default function Partners() {
   return (
     <>
       <Header />
+      <main id="main-content">
       {/* Centred lead, on the same 810px measure and type treatment as the
           home page's hero and mission blocks. */}
       <section className="gutter pb-12 pt-8 md:pb-16 md:pt-14">
@@ -52,6 +70,7 @@ export default function Partners() {
       {/* PartnerProgram (the black pillars card) removed per Hamza — section
           is being reworked. Component left in place at
           components/PartnerProgram.tsx, just unrendered. */}
+      </main>
       <Footer />
     </>
   )

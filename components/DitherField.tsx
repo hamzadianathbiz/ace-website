@@ -102,10 +102,12 @@ export default function DitherField({
     color, cell, levelsLow, levelsHigh, invert, fit, srcRect,
     gamma, contrast, amp, threshold, maxScale, smoothing,
   })
-  opts.current = {
-    color, cell, levelsLow, levelsHigh, invert, fit, srcRect,
-    gamma, contrast, amp, threshold, maxScale, smoothing,
-  }
+  useEffect(() => {
+    opts.current = {
+      color, cell, levelsLow, levelsHigh, invert, fit, srcRect,
+      gamma, contrast, amp, threshold, maxScale, smoothing,
+    }
+  }, [color, cell, levelsLow, levelsHigh, invert, fit, srcRect, gamma, contrast, amp, threshold, maxScale, smoothing])
 
   useEffect(() => {
     const host = hostRef.current

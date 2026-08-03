@@ -10,11 +10,13 @@ export default function Home() {
   return (
     <>
       <Header />
-      <Hero />
-      <Advisory />
-      <Deployment />
-      <Capability />
-      <Security />
+      <main id="main-content">
+        <Hero />
+        <Advisory />
+        <Deployment />
+        <Capability />
+        <Security />
+      </main>
       <Footer />
     </>
   )

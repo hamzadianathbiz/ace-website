@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import heroImage from '@/public/assets/web/hero-mosaic.png'
+import aceLogoWhite from '@/public/assets/web/ace-logo-white.png'
 import CallCta from '@/components/CallCta'
 import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
 
@@ -100,25 +101,24 @@ export default function Hero() {
   }
 
   /*
-    The intro keeps the same four-beat choreography everywhere, including
-    under Reduce Motion. Mobile uses a longer version of those same beats so
-    the large portrait-to-card move reads as deliberate rather than abrupt.
-
-    It has been through both extremes: skipped entirely on that setting,
-    which meant a phone with the switch on never saw it; then played with
-    the travel removed, which is what "starts well but abruptly disappears"
-    was — the frame arriving in its card with no transition to watch.
-
-    It is opacity and a single settling frame, with no parallax, loop or
-    bounce, which is the mild end of what the setting exists to catch.
-    globals.css still stops everything else on the page.
+    Reduced Motion settles immediately. The matching CSS rule in globals.css
+    pins the frame into its card before this effect runs, so there is no
+    full-viewport flash or travel while React hydrates.
   */
 
   // Resolve the timing profile before the image-ready effect can start the
   // hold. Captured once because switching timings mid-intro on rotation or
   // resize would create a visible speed change.
   useEffect(() => {
-    setIsMobile(window.matchMedia('(max-width: 767px)').matches)
+    const frame = window.requestAnimationFrame(() => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        setReady(true)
+        setPhase('settled')
+        return
+      }
+      setIsMobile(window.matchMedia('(max-width: 767px)').matches)
+    })
+    return () => window.cancelAnimationFrame(frame)
   }, [])
 
   const timing = isMobile ? MOBILE_TIMING : DESKTOP_TIMING
@@ -142,7 +142,9 @@ export default function Hero() {
   */
   useEffect(() => {
     delete document.documentElement.dataset.deepLink
-    if (deepLink.current) setPhase('settled')
+    if (!deepLink.current) return
+    const frame = window.requestAnimationFrame(() => setPhase('settled'))
+    return () => window.cancelAnimationFrame(frame)
   }, [])
 
   /*
@@ -271,13 +273,14 @@ export default function Hero() {
           rather than separately — they read as a single mark. */}
       {(phase === 'cover' || phase === 'fading') && (
         <div
-          data-motion-ok
           className="hero-intro-logo pointer-events-none fixed inset-0 z-[70] flex flex-col items-center justify-center gap-7 px-6"
           style={introStyle}
         >
-          <img
-            src="/assets/web/ace-logo-white.png"
+          <Image
+            src={aceLogoWhite}
             alt=""
+            priority
+            sizes="(max-width: 645px) 62vw, 400px"
             className="w-[min(400px,62vw)]"
           />
           {/* The site's display face, at display scale. Cardo ships a real
@@ -300,7 +303,6 @@ export default function Hero() {
           className="hero-card-shell relative aspect-[4/3] w-full md:aspect-auto md:max-h-[643px] md:min-h-[260px] md:flex-1"
         >
           <div
-            data-motion-ok
             className="hero-frame absolute inset-0 overflow-hidden rounded-2xl"
             style={frameStyle}
           >
@@ -334,7 +336,6 @@ export default function Hero() {
               line before breaking — on a centred block that is the whole
               difference between a tidy stack and a ragged one. */}
           <h1
-            data-motion-ok
             className={`hero-heading display-xl text-balance text-center text-black ${rise}`}
             style={{
               transitionDuration: `${timing.reveal}ms`,
@@ -345,7 +346,6 @@ export default function Hero() {
           </h1>
 
           <p
-            data-motion-ok
             className={`hero-subhead mx-auto max-w-[680px] text-balance text-center text-[16px] leading-[1.7] tracking-[-0.017em] text-[#1C1A1A]/70 md:text-[18px] ${rise}`}
             style={{
               transitionDuration: `${timing.reveal}ms`,
@@ -358,7 +358,6 @@ export default function Hero() {
           </p>
 
           <div
-            data-motion-ok
             className={rise}
             style={{
               transitionDuration: `${timing.reveal}ms`,

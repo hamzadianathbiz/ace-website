@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Schibsted_Grotesk, Cardo } from 'next/font/google'
 import 'lenis/dist/lenis.css'
 import './globals.css'
 import SmoothScroll from '@/components/SmoothScroll'
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, SOCIAL_IMAGE } from '@/lib/site'
 
 /*
   Body font, sitewide — every piece of text on the page that is not a
@@ -44,30 +45,41 @@ const display = Cardo({
   variable: '--font-display',
 })
 
-const DESCRIPTION =
-  'AI for lower-mid and mid-market private capital.'
-
 export const metadata: Metadata = {
   // The live production alias. Update when a custom domain is attached —
   // Open Graph and canonical URLs are resolved against this.
-  metadataBase: new URL('https://ace-website-liard.vercel.app'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'ACE — AI Deployment Co.',
+    default: SITE_NAME,
     template: '%s — ACE',
   },
-  description: DESCRIPTION,
+  applicationName: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: '/' },
+  robots: {
+    index: true,
+    follow: true,
+  },
   openGraph: {
-    title: 'ACE — AI Deployment Co.',
-    description: DESCRIPTION,
-    siteName: 'ACE — AI Deployment Co.',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    siteName: SITE_NAME,
     type: 'website',
-    images: [{ url: '/assets/web/ace-logo-tagline.png' }],
+    url: '/',
+    images: [
+      {
+        url: SOCIAL_IMAGE,
+        width: 1280,
+        height: 720,
+        alt: SITE_NAME,
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ACE — AI Deployment Co.',
-    description: DESCRIPTION,
-    images: ['/assets/web/ace-logo-tagline.png'],
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [SOCIAL_IMAGE],
   },
 }
 
@@ -101,6 +113,12 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-ace-cream font-sans text-ace-black">
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-lg bg-ace-black px-4 py-3 text-sm font-medium text-white transition-transform duration-200 focus:translate-y-0"
+        >
+          Skip to content
+        </a>
         <SmoothScroll />
         {children}
       </body>

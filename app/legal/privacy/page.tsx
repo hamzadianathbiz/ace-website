@@ -6,6 +6,20 @@ export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'How ACE collects, uses, shares and protects personal information.',
   alternates: { canonical: '/legal/privacy' },
+  openGraph: {
+    title: 'Privacy Policy — ACE',
+    description: 'How ACE collects, uses, shares and protects personal information.',
+    url: '/legal/privacy',
+    siteName: 'ACE — AI Deployment Co.',
+    type: 'website',
+    images: ['/assets/web/hero-cityscape-poster.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy — ACE',
+    description: 'How ACE collects, uses, shares and protects personal information.',
+    images: ['/assets/web/hero-cityscape-poster.jpg'],
+  },
 }
 
 const EFFECTIVE_DATE = '3 August 2026'

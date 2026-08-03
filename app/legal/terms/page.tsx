@@ -6,6 +6,20 @@ export const metadata: Metadata = {
   title: 'Terms & Conditions',
   description: 'Terms governing access to and use of the ACE website.',
   alternates: { canonical: '/legal/terms' },
+  openGraph: {
+    title: 'Terms & Conditions — ACE',
+    description: 'Terms governing access to and use of the ACE website.',
+    url: '/legal/terms',
+    siteName: 'ACE — AI Deployment Co.',
+    type: 'website',
+    images: ['/assets/web/hero-cityscape-poster.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms & Conditions — ACE',
+    description: 'Terms governing access to and use of the ACE website.',
+    images: ['/assets/web/hero-cityscape-poster.jpg'],
+  },
 }
 
 const EFFECTIVE_DATE = '3 August 2026'

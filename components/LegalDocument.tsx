@@ -50,7 +50,7 @@ export default function LegalDocument({
   return (
     <>
       <Header />
-      <main className="gutter pb-20 pt-8 md:pb-28 md:pt-14">
+      <main id="main-content" className="gutter pb-20 pt-8 md:pb-28 md:pt-14">
         <header className="mx-auto grid w-full max-w-[1128px] gap-8 border-b border-ace-line pb-10 md:grid-cols-[1fr_1fr] md:gap-16 md:pb-14">
           <div className="flex flex-col gap-5">
             <span className="label">{eyebrow}</span>
@@ -82,7 +82,7 @@ export default function LegalDocument({
               aria-label={`${title} sections`}
               className="sticky top-8 border-t border-ace-line pt-5"
             >
-              <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.08em] text-ace-gray3">
+              <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.08em] text-ace-muted">
                 On this page
               </p>
               <SectionLinks sections={sections} />
@@ -94,7 +94,7 @@ export default function LegalDocument({
               <section
                 key={section.id}
                 id={section.id}
-                className="scroll-mt-24 border-t border-ace-line py-9 first:border-t-0 first:pt-0 md:scroll-mt-8 md:py-12"
+                className="scroll-mt-24 border-t border-ace-line py-9 first:border-t-0 first:pt-0 md:scroll-mt-28 md:py-12 lg:scroll-mt-8"
               >
                 <div className="grid grid-cols-[2.75rem_1fr] gap-2 md:grid-cols-[3.5rem_1fr] md:gap-4">
                   <span className="font-display text-[16px] text-ace-red md:text-[18px]">

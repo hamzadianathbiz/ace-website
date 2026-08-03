@@ -2,11 +2,11 @@
 
 Marketing site for ACE: AI advisory and deployment for lower-mid and mid-market private capital.
 
-Production: https://ace-website-liard.vercel.app
+Production: https://acedeployed.com
 
 ## Stack
 
-Next.js 14 (App Router) · React 18 · TypeScript · Tailwind CSS. No animation library — every transition is hand-rolled CSS driven by mount-triggered React state, which is the convention throughout.
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS. No animation library — every transition is hand-rolled CSS driven by mount-triggered React state, which is the convention throughout.
 
 ## Getting started
 
@@ -22,25 +22,35 @@ Open `http://localhost:3000`.
 | `npm run dev` | Dev server |
 | `npm run build` | Production build |
 | `npm run start` | Serve the production build |
-| `npm run lint` | Next.js ESLint |
+| `npm run lint` | ESLint with Next.js Core Web Vitals and TypeScript rules |
+| `npm run typecheck` | TypeScript validation without emitting files |
+| `npm run check` | Lint, typecheck and production build |
 
 ## Routes
 
 | Route | File | Notes |
 | --- | --- | --- |
 | `/` | `app/page.tsx` | The whole marketing story, one page, section anchors |
+| `/company` | `app/company/page.tsx` | Case studies, fulfillment partner and company story |
 | `/partners` | `app/partners/page.tsx` | Partner Program — separate audience, so a separate route |
+| `/legal/terms` | `app/legal/terms/page.tsx` | Terms & Conditions |
+| `/legal/privacy` | `app/legal/privacy/page.tsx` | Privacy Policy |
+| `/robots.txt` | `app/robots.ts` | Search-engine crawling rules |
+| `/sitemap.xml` | `app/sitemap.ts` | Canonical public routes |
 
 ## Where things live
 
 ```
 app/
-  layout.tsx      fonts, metadata
+  layout.tsx      fonts, shared metadata, skip link
   page.tsx        home page composition
   globals.css     the type scale, button, label, accordion and stat classes
+  company/        company route
+  legal/          terms and privacy routes
   partners/       partner program route
 components/       one file per section
 lib/links.ts      every outbound URL on the site
+lib/site.ts       canonical host and shared site metadata
 public/assets/web logos and hero imagery
 ```
 
@@ -48,8 +58,8 @@ public/assets/web logos and hero imagery
 
 Every href on the site resolves from this one file. Nothing hardcodes a URL of its own.
 
-- `DISCOVERY_CALL` — the cal.com link behind all 13 CTAs. Change it here, every button follows.
-- `SECTIONS` — in-page anchors. They are absolute (`/#approach`, not `#approach`) so they still resolve from `/partners`. The ids live on the sections themselves; keep the two in step.
+- `DISCOVERY_CALL` — the Cal.com link behind every discovery CTA. Change it here, every button follows.
+- `SECTIONS` — in-page anchors. They are absolute (`/#services`, not `#services`) so they still resolve from other routes. The ids live on the sections themselves; keep the two in step.
 
 ### The type scale — `app/globals.css`
 
@@ -84,7 +94,7 @@ Worth knowing before you touch it:
 - Scroll is locked until the image is home.
 - The whole sequence is skipped under `prefers-reduced-motion`.
 
-Timing knobs are `HOLD_MS` and `SHRINK_MS` at the top of the file.
+Timing knobs live in `DESKTOP_TIMING` and `MOBILE_TIMING` at the top of the file.
 
 ## Fonts
 
@@ -108,8 +118,13 @@ The framework preset **must** stay set to Next.js. With no preset, Vercel runs t
 
 `metadataBase` in `app/layout.tsx` points at the production alias. Update it when a custom domain is attached, or Open Graph and canonical URLs will resolve against the wrong host.
 
-## Known TODOs
+## Release checks still requiring an owner decision
 
-- The three figures in `components/Company.tsx` come from a single client engagement and carry an attribution line saying so. They are pending final sign-off — do not present them as blended averages.
-- Unused assets kept for reference, safe to delete: `public/assets/web/hero-halftone.png`, `hero-skyline.png`, `hero-cityscape.mp4`, `hero-horse.mp4`, and `components/DitherField.tsx`.
-- No Prettier config in the repo. Running `prettier` uses its defaults (semicolons, double quotes), which do not match the codebase style. Add a `.prettierrc` before wiring up format-on-save.
+- Confirm every public case study and named fulfillment-partner claim against signed engagement records before production promotion.
+- `acedeployed.com` is the canonical site host. Preserve the existing `partners.acedeployed.com` and email DNS records when changing DNS for the apex or `www` host.
+- Add the ACE privacy-policy URL to the Cal.com and Tally collection points, and correct any duplicated currency symbols in the Cal.com qualification labels.
+
+## Maintenance notes
+
+- Reference assets that are not imported by the site remain under `public/assets/web`. They can be removed in a dedicated asset-cleanup change after the final content set is locked.
+- No Prettier config is committed. Running Prettier with its defaults does not match the established source style.

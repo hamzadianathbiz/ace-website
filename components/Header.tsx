@@ -1,8 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown, Menu, X } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
+import aceLogomark from '@/public/assets/web/ace-logomark.png'
 import { DISCOVERY_CALL, SECTIONS } from '@/lib/links'
 import { lockScroll, unlockScroll } from '@/lib/scroll-lock'
 
@@ -35,6 +37,10 @@ const NAV_LINK =
 */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const headerBarRef = useRef<HTMLDivElement>(null)
   // Which item's children are showing in the mobile menu. One at a time.
   const [openSection, setOpenSection] = useState<string | null>(null)
 
@@ -53,8 +59,39 @@ export default function Header() {
       top: document.body.style.top,
       width: document.body.style.width,
     }
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setMenuOpen(false)
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    const backgroundRegions = [
+      document.querySelector<HTMLElement>('a[href="#main-content"]'),
+      headerBarRef.current,
+      document.querySelector<HTMLElement>('main'),
+      document.querySelector<HTMLElement>('footer'),
+    ].filter((region): region is HTMLElement => Boolean(region))
+    const previousInert = backgroundRegions.map((region) => region.inert)
+    backgroundRegions.forEach((region) => {
+      region.inert = true
+    })
+    const focusFrame = window.requestAnimationFrame(() => closeButtonRef.current?.focus())
+    const handleKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        return
+      }
+      if (event.key !== 'Tab') return
+
+      const focusable = menuRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      if (!focusable?.length) return
+
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault()
+        last.focus()
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault()
+        first.focus()
+      }
     }
 
     document.body.style.overflow = 'hidden'
@@ -62,7 +99,7 @@ export default function Header() {
     document.body.style.top = `-${scrollY}px`
     document.body.style.width = '100%'
     lockScroll()
-    window.addEventListener('keydown', closeOnEscape)
+    window.addEventListener('keydown', handleKeydown)
 
     return () => {
       document.body.style.overflow = previousBodyStyles.overflow
@@ -71,9 +108,23 @@ export default function Header() {
       document.body.style.width = previousBodyStyles.width
       window.scrollTo(0, scrollY)
       unlockScroll()
-      window.removeEventListener('keydown', closeOnEscape)
+      window.cancelAnimationFrame(focusFrame)
+      window.removeEventListener('keydown', handleKeydown)
+      backgroundRegions.forEach((region, index) => {
+        region.inert = previousInert[index]
+      })
+      if (previouslyFocused && document.contains(previouslyFocused)) previouslyFocused.focus()
     }
   }, [menuOpen])
+
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1024px)')
+    const closeAtDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setMenuOpen(false)
+    }
+    desktop.addEventListener('change', closeAtDesktop)
+    return () => desktop.removeEventListener('change', closeAtDesktop)
+  }, [])
 
   return (
     <header className="sticky top-0 z-40 bg-ace-cream lg:static">
@@ -89,7 +140,10 @@ export default function Header() {
         burger sits in the centre of the bar. So below lg this is a plain
         flex row instead: logo left, burger hard right.
       */}
-      <div className="mx-auto flex h-[72px] w-full max-w-[1128px] items-center justify-between px-4 md:h-[100px] md:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr]">
+      <div
+        ref={headerBarRef}
+        className="mx-auto flex h-[72px] w-full max-w-[1128px] items-center justify-between px-4 md:h-[100px] md:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr]"
+      >
         {/* justify-self-start: in the grid the link would otherwise stretch
             across the whole 1fr rail and turn dead space into a click
             target. Harmless in the flex row below lg. */}
@@ -98,10 +152,15 @@ export default function Header() {
           aria-label="ACE — AI Deployment Co."
           className="flex min-h-11 min-w-11 items-center justify-self-start"
         >
-          <img src="/assets/web/ace-logomark.png" alt="" className="h-9 w-auto md:h-12" />
+          <Image
+            src={aceLogomark}
+            alt=""
+            sizes="(max-width: 767px) 76px, 101px"
+            className="h-9 w-auto md:h-12"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-10 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-10 lg:flex">
           {NAV.map((item) =>
             item.children ? (
               <div key={item.label} className="group relative">
@@ -151,10 +210,13 @@ export default function Header() {
             Book a Discovery Call
           </Link>
           <button
+            ref={menuButtonRef}
             type="button"
             onClick={() => setMenuOpen(true)}
             className="flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-black/10 text-black transition-transform duration-200 active:scale-95 lg:hidden"
             aria-label="Open menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
             <Menu className="h-4 w-4" />
           </button>
@@ -162,6 +224,13 @@ export default function Header() {
       </div>
 
       <div
+        ref={menuRef}
+        id="mobile-navigation"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
         className="fixed inset-0 z-50 flex h-[100dvh] flex-col justify-between overscroll-contain bg-ace-cream px-6 py-8 transition-all duration-500 ease-in-out lg:hidden"
         style={{
           transform: menuOpen ? 'scaleY(1)' : 'scaleY(0)',
@@ -172,6 +241,7 @@ export default function Header() {
       >
         <div className="flex justify-end">
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={() => setMenuOpen(false)}
             className="flex h-11 w-11 touch-manipulation items-center justify-center rounded-full border border-black/10 text-black transition-transform duration-200 active:scale-95"
@@ -184,7 +254,7 @@ export default function Header() {
         {/* min-h-0 lets the scroll actually engage inside a flex column. The
             menu grew sub-items, and on a short phone the list can now be
             taller than the space between the close button and the CTA. */}
-        <nav className="flex min-h-0 flex-1 flex-col justify-center gap-6 overflow-y-auto py-4">
+        <nav aria-label="Mobile" className="flex min-h-0 flex-1 flex-col justify-center gap-6 overflow-y-auto py-4">
           {NAV.map((item) => (
             <div key={item.label} className="flex flex-col gap-3">
               {/*
@@ -207,8 +277,9 @@ export default function Header() {
                     type="button"
                     onClick={() => setOpenSection(openSection === item.label ? null : item.label)}
                     aria-expanded={openSection === item.label}
+                    aria-controls="mobile-company-sections"
                     aria-label={`${openSection === item.label ? 'Hide' : 'Show'} ${item.label} sections`}
-                    className="flex h-11 w-11 flex-none touch-manipulation items-center justify-center text-black/40 transition-colors duration-200 hover:text-black active:scale-95"
+                    className="flex h-11 w-11 flex-none touch-manipulation items-center justify-center text-black/60 transition-colors duration-200 hover:text-black active:scale-95"
                   >
                     <ChevronDown
                       aria-hidden
@@ -220,13 +291,13 @@ export default function Header() {
                 )}
               </div>
               {item.children && openSection === item.label && (
-                <div className="flex flex-col gap-3 pl-4">
+                <div id="mobile-company-sections" className="flex flex-col gap-3 pl-4">
                   {item.children.map((child) => (
                     <Link
                       key={child.label}
                       href={child.href}
                       onClick={() => setMenuOpen(false)}
-                      className="flex min-h-11 touch-manipulation items-center text-[18px] text-black/50 transition-colors duration-200 hover:text-black"
+                      className="flex min-h-11 touch-manipulation items-center text-[18px] text-black/60 transition-colors duration-200 hover:text-black"
                     >
                       {child.label}
                     </Link>
